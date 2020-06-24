@@ -10,7 +10,6 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
@@ -58,7 +57,7 @@ class DashboardActivity : AppCompatActivity() {
         val userName = sharedPreferences.getString(userNameKey, "Debaleen")
         val userPhone = sharedPreferences.getString(userMobileKey, "No phone")
         txtUserName.text = userName
-        txtUserPhone.text = userPhone
+        txtUserPhone.text = getString(R.string.mobile_number_template, userPhone)
 
         setUpToolbar()
         openHomeFragment()

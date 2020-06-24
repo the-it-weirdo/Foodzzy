@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
         val userDeliveryAddress = sharedPreferences.getString(userAddressKey, "No address")
 
         txtUserName.text = userName
-        txtUserPhone.text = userPhone
+        txtUserPhone.text = getString(R.string.mobile_number_template, userPhone)
         txtUserEmail.text = userEmail
         txtUserDeliveryAddress.text = userDeliveryAddress
 

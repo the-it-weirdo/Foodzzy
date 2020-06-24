@@ -3,142 +3,130 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".activity.RegistrationActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:elevation="@dimen/elevation_default"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/padding_default">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:alpha="0.7"
-            android:scaleX="2"
-            android:background="@drawable/bg" />
-
-        <LinearLayout
+        <EditText
+            android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:elevation="@dimen/elevation_default"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/padding_default">
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_x_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_person"
+            android:drawablePadding="@dimen/padding_small"
+            android:hint="@string/name_hint"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:padding="@dimen/padding_large" />
 
-            <EditText
-                android:id="@+id/etName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_x_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:background="@color/white"
-                android:drawableStart="@drawable/ic_person"
-                android:drawablePadding="@dimen/padding_small"
-                android:hint="@string/name_hint"
-                android:inputType="textPersonName"
-                android:maxLines="1"
-                android:padding="@dimen/padding_large" />
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_email"
+            android:drawablePadding="@dimen/padding_small"
+            android:hint="@string/email_address_hint"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:padding="@dimen/padding_large" />
 
-            <EditText
-                android:id="@+id/etEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:background="@color/white"
-                android:drawableStart="@drawable/ic_email"
-                android:drawablePadding="@dimen/padding_small"
-                android:hint="@string/email_address_hint"
-                android:inputType="textEmailAddress"
-                android:maxLines="1"
-                android:padding="@dimen/padding_large" />
+        <EditText
+            android:id="@+id/etMobileNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_mobile"
+            android:drawablePadding="@dimen/padding_small"
+            android:hint="@string/mobile_number_hint"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:padding="@dimen/padding_large" />
 
-            <EditText
-                android:id="@+id/etMobileNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:background="@color/white"
-                android:drawableStart="@drawable/ic_mobile"
-                android:drawablePadding="@dimen/padding_small"
-                android:hint="@string/mobile_number_hint"
-                android:inputType="phone"
-                android:maxLength="10"
-                android:maxLines="1"
-                android:padding="@dimen/padding_large" />
+        <EditText
+            android:id="@+id/etDeliveryAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_location"
+            android:drawablePadding="@dimen/padding_small"
+            android:hint="@string/delivery_address_hint"
+            android:inputType="textPostalAddress"
+            android:padding="@dimen/padding_large" />
 
-            <EditText
-                android:id="@+id/etDeliveryAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:background="@color/white"
-                android:drawableStart="@drawable/ic_location"
-                android:drawablePadding="@dimen/padding_small"
-                android:hint="@string/delivery_address_hint"
-                android:inputType="textPostalAddress"
-                android:padding="@dimen/padding_large" />
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_password"
+            android:drawablePadding="@dimen/padding_small"
+            android:hint="@string/password_hint_long"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:padding="@dimen/padding_large" />
 
-            <EditText
-                android:id="@+id/etPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:background="@color/white"
-                android:drawableStart="@drawable/ic_password"
-                android:drawablePadding="@dimen/padding_small"
-                android:hint="@string/password_hint_long"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="@dimen/padding_large" />
+        <EditText
+            android:id="@+id/etConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:background="@color/white"
+            android:drawableStart="@drawable/ic_password"
+            android:drawablePadding="@dimen/padding_small"
+            android:hint="@string/confirm_password_hint"
+            android:inputType="textPassword"
+            android:maxLines="1"
+            android:padding="@dimen/padding_large" />
 
-            <EditText
-                android:id="@+id/etConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_large"
-                android:background="@color/white"
-                android:drawableStart="@drawable/ic_password"
-                android:drawablePadding="@dimen/padding_small"
-                android:hint="@string/confirm_password_hint"
-                android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="@dimen/padding_large" />
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_large"
+            android:layout_marginTop="@dimen/margin_x_large"
+            android:layout_marginEnd="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:background="@color/secondaryColor"
+            android:backgroundTint="@color/secondaryColor"
+            android:text="@string/register_button_text"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="@dimen/text_size_default" />
 
-            <Button
-                android:id="@+id/btnRegister"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_x_large"
-                android:layout_marginEnd="@dimen/margin_large"
-                android:layout_marginBottom="@dimen/margin_default"
-                android:background="@color/secondaryColor"
-                android:backgroundTint="@color/secondaryColor"
-                android:text="@string/register_button_text"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@color/secondaryTextColor"
-                android:textSize="@dimen/text_size_default" />
+    </LinearLayout>
 
-        </LinearLayout>
-    </RelativeLayout>
 </ScrollView>

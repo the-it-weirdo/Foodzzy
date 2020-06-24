@@ -1,5 +1,6 @@
 package dev.debaleen.foodrunner.adapter
 
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,17 +26,21 @@ class FAQAdapter(
 
     override fun onBindViewHolder(holder: FAQViewHolder, position: Int) {
         val faq = faqsList[position]
-        holder.bind(faq)
+        holder.bind(faq, position)
     }
 
-    class FAQViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class FAQViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         private val txtQuestion: TextView = view.findViewById(R.id.txtQuestion)
         private val txtAnswer: TextView = view.findViewById(R.id.txtAnswer)
 
-        fun bind(faqUiModel: FAQUIModel) {
-            txtQuestion.text = faqUiModel.question
-            txtAnswer.text = faqUiModel.answer
+        fun bind(faqUiModel: FAQUIModel, position: Int) {
+            txtQuestion.text = view.context.getString(
+                R.string.question_template,
+                position + 1,
+                faqUiModel.question
+            )
+            txtAnswer.text = view.context.getString(R.string.answer_template, faqUiModel.answer)
         }
     }
 }

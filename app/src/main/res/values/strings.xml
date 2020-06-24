@@ -36,4 +36,8 @@
     <string name="favourite_button_content_desc">Add to favourites</string>
     <string name="no_favourite_restaurants">You have no favourite restaurants. Add some favourite restaurants to view here.</string>
     <string name="no_favourites">No favourites</string>
+
+    <string name="mobile_number_template">+91-%s</string>
+    <string name="question_template">Q.%d. %s</string>
+    <string name="answer_template">Answer: %s</string>
 </resources>
