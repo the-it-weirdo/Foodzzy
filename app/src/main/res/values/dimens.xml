@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="logo_width">220dp</dimen>
+    <dimen name="logo_height">220dp</dimen>
+    <dimen name="logo_width_small">120dp</dimen>
+    <dimen name="logo_height_small">120dp</dimen>
+
+    <dimen name="profile_pic_width">100dp</dimen>
+    <dimen name="profile_pic_height">100dp</dimen>
+
+    <dimen name="margin_x_large">20dp</dimen>
+    <dimen name="margin_large">16dp</dimen>
+    <dimen name="margin_default">8dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_x_small_">2dp</dimen>
+
+    <dimen name="padding_large">9dp</dimen>
+    <dimen name="padding_default">6dp</dimen>
+    <dimen name="padding_small">3dp</dimen>
+
+    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_default">20sp</dimen>
+    <dimen name="text_size_large">40sp</dimen>
+
+    <dimen name="card_corner_radius">12dp</dimen>
+    <dimen name="card_elevation">20dp</dimen>
+    <dimen name="restaurant_item_height">120dp</dimen>
+    <dimen name="fav_button_height">48dp</dimen>
+    <dimen name="fav_button_width">48dp</dimen>
+</resources>

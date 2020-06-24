@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/margin_default"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginEnd="@dimen/margin_default"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:background="@color/card_background"
+    android:elevation="@dimen/card_elevation"
+    app:cardCornerRadius="@dimen/card_corner_radius">
+
+    <RelativeLayout
+        android:id="@+id/llContent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/restaurant_item_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/padding_default"
+        android:paddingEnd="@dimen/padding_default">
+
+        <ImageView
+            android:id="@+id/imgRestaurantImage"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/restaurant_image_content_desc"
+            android:padding="@dimen/padding_default"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/txtRestaurantName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/imgRestaurantImage"
+            android:layout_alignBottom="@id/btnFavourite"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_toStartOf="@id/btnFavourite"
+            android:layout_toEndOf="@id/imgRestaurantImage"
+            android:padding="@dimen/padding_default"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_default"
+            tools:text="Restaurant Name" />
+
+        <TextView
+            android:id="@+id/txtCostForOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/imgRestaurantImage"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_toStartOf="@id/txtRating"
+            android:layout_toEndOf="@id/imgRestaurantImage"
+            android:drawableStart="@drawable/ic_rupee_indian"
+            android:drawablePadding="@dimen/padding_default"
+            android:padding="@dimen/padding_default"
+            android:textSize="@dimen/text_size_small"
+            tools:text="1000/person" />
+
+        <ImageButton
+            android:id="@+id/btnFavourite"
+            android:layout_width="@dimen/fav_button_width"
+            android:layout_height="@dimen/fav_button_height"
+            android:layout_alignTop="@id/imgRestaurantImage"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:backgroundTint="@android:color/transparent"
+            android:contentDescription="@string/favourite_button_content_desc"
+            android:src="@drawable/ic_favourite_off" />
+
+        <TextView
+            android:id="@+id/txtRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/txtCostForOne"
+            android:layout_alignParentEnd="true"
+            android:drawableEnd="@drawable/ic_rating"
+            android:drawablePadding="@dimen/padding_default"
+            android:padding="@dimen/padding_default"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/favourite_color"
+            android:textSize="@dimen/text_size_small"
+            tools:text="4.8" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
