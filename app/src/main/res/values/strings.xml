@@ -34,4 +34,6 @@
 
     <string name="restaurant_image_content_desc">Restaurant Image</string>
     <string name="favourite_button_content_desc">Add to favourites</string>
+    <string name="no_favourite_restaurants">You have no favourite restaurants. Add some favourite restaurants to view here.</string>
+    <string name="no_favourites">No favourites</string>
 </resources>

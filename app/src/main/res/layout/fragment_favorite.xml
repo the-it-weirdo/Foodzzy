@@ -8,7 +8,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerFavourite"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_small"
         android:paddingTop="@dimen/padding_small"
         android:paddingBottom="@dimen/padding_small"
@@ -25,6 +25,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/emptyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/logo_width"
+            android:layout_height="@dimen/logo_height"
+            android:layout_above="@id/txtNoFavourites"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/no_favourites"
+            android:backgroundTint="@color/primaryColor"
+            android:background="@drawable/rounded_corner_background"
+            android:src="@drawable/foodiction_edited" />
+
+        <TextView
+            android:id="@+id/txtNoFavourites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="@dimen/margin_small"
+            android:padding="@dimen/padding_default"
+            android:text="@string/no_favourite_restaurants"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_default" />
 
     </RelativeLayout>
 

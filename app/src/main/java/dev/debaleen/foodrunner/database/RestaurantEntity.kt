@@ -3,6 +3,7 @@ package dev.debaleen.foodrunner.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import dev.debaleen.foodrunner.model.RestaurantUIModel
 
 @Entity(tableName = "restaurants")
 data class RestaurantEntity(
@@ -13,4 +14,18 @@ data class RestaurantEntity(
     @ColumnInfo(name = "res_image_url") val resImageUrl: String
 )
 
-
+fun List<RestaurantEntity>.toListRestaurantUIModel() : List<RestaurantUIModel> {
+    val returnList = mutableListOf<RestaurantUIModel>()
+    map {
+        returnList.add(
+            RestaurantUIModel(
+                resId = it.resId,
+                resName = it.resName,
+                resCostForOne = it.resCostForOne,
+                resRating = it.resRating,
+                resImageUrl = it.resImageUrl
+            )
+        )
+    }
+    return returnList
+}

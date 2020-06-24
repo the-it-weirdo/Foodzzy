@@ -64,17 +64,21 @@ class RestaurantAdapter(
             }
 
             llContent.setOnClickListener {
-                clickListener.onRestaurantClick(adapterPosition, restaurantUIModel.resId)
+                if (adapterPosition != -1) {
+                    clickListener.onRestaurantClick(adapterPosition, restaurantUIModel.resId)
+                }
             }
 
             btnFavouriteButton.setOnClickListener {
-                clickListener.onFavouriteClick(adapterPosition, restaurantUIModel.resId)
+                if (adapterPosition != -1) {
+                    clickListener.onFavouriteClick(adapterPosition, restaurantUIModel.resId)
+                }
             }
         }
 
     }
 
-    public interface RestaurantClickListener {
+    interface RestaurantClickListener {
         fun onRestaurantClick(position: Int, resId: String)
         fun onFavouriteClick(position: Int, resId: String)
     }
