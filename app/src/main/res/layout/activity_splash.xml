@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primaryColor"
     tools:context=".activity.SplashActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:background="@drawable/bg" />
 
     <ImageView
         android:id="@+id/imgAppLogo"
@@ -13,6 +18,7 @@
         android:layout_above="@id/txtAppName"
         android:layout_centerHorizontal="true"
         android:contentDescription="@string/content_app_logo"
+        android:elevation="@dimen/elevation_default"
         android:src="@drawable/foodiction_edited" />
 
     <TextView
@@ -20,9 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:elevation="@dimen/elevation_default"
         android:text="@string/app_name"
         android:textAlignment="center"
-        android:textColor="@color/primaryTextColor"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="40sp"
         android:textStyle="bold" />
 </RelativeLayout>

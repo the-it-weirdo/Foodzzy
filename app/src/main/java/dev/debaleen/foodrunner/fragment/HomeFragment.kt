@@ -97,12 +97,6 @@ class HomeFragment : Fragment() {
                                                     position: Int,
                                                     resId: String
                                                 ) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        " ${restaurantList[position].resName} with id: $resId clicked for favourite.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-
                                                     if (!DBAsyncTask(
                                                             activity as Context,
                                                             restaurantList[position].toRestaurantEntity(),
@@ -123,7 +117,7 @@ class HomeFragment : Fragment() {
                                                             )
                                                             Toast.makeText(
                                                                 context,
-                                                                "Restaurant added to favourites",
+                                                                "${restaurantList[position].resName} added to favourites",
                                                                 Toast.LENGTH_SHORT
                                                             ).show()
                                                         } else {

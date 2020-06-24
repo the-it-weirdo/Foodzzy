@@ -166,7 +166,7 @@ class DashboardActivity : AppCompatActivity() {
             FragmentDestinations.HOME -> "All Restaurants"
             FragmentDestinations.MY_PROFILE -> "My Profile"
             FragmentDestinations.FAVORITE_RESTAURANTS -> "Favorite Restaurants"
-            FragmentDestinations.FAQs -> "FAQs"
+            FragmentDestinations.FAQs -> "Frequently Asked Questions"
         }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame, fragment)

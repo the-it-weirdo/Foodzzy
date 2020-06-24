@@ -7,15 +7,14 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import dev.debaleen.foodrunner.R
-import dev.debaleen.foodrunner.model.RestaurantNetworkModel
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import jp.wasabeef.picasso.transformations.CropSquareTransformation
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 
 class RestaurantAdapter(
-    val itemList: ArrayList<RestaurantUIModel>,
-    val clickListener: RestaurantClickListener
+    private val itemList: ArrayList<RestaurantUIModel>,
+    private val clickListener: RestaurantClickListener
 ) :
     RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
 

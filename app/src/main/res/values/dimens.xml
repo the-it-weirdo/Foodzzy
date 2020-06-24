@@ -23,8 +23,9 @@
     <dimen name="text_size_large">40sp</dimen>
 
     <dimen name="card_corner_radius">12dp</dimen>
-    <dimen name="card_elevation">20dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
     <dimen name="restaurant_item_height">120dp</dimen>
     <dimen name="fav_button_height">48dp</dimen>
     <dimen name="fav_button_width">48dp</dimen>
+    <dimen name="elevation_default">5dp</dimen>
 </resources>

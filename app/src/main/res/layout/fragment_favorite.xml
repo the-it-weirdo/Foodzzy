@@ -9,7 +9,6 @@
         android:id="@+id/recyclerFavourite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_small"
         android:paddingTop="@dimen/padding_small"
         android:paddingBottom="@dimen/padding_small"
         tools:listitem="@layout/restaurant_item_layout" />
