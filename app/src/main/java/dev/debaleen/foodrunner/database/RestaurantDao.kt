@@ -14,9 +14,9 @@ interface RestaurantDao {
     @Delete
     fun deleteFavouriteRestaurant(restaurantEntity: RestaurantEntity)
 
-    @Query("SELECT * FROM restaurants")
-    fun getAllFavouriteRestaurants(): List<RestaurantEntity>
+    @Query("SELECT * FROM restaurants WHERE user_id= :userId")
+    fun getAllFavouriteRestaurants(userId: String): List<RestaurantEntity>
 
-    @Query("SELECT * FROM restaurants WHERE res_id = :resId")
-    fun getFavouriteRestaurantById(resId: String): RestaurantEntity
+    @Query("SELECT * FROM restaurants WHERE res_id = :resId AND user_id = :userId")
+    fun getFavouriteRestaurantById(resId: String, userId: String): RestaurantEntity
 }

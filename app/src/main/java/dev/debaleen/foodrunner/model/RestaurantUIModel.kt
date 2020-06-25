@@ -14,9 +14,10 @@ class RestaurantUIModel(
             field = value
         }
 
-    fun toRestaurantEntity(): RestaurantEntity {
+    fun toRestaurantEntity(userId: String): RestaurantEntity {
         return RestaurantEntity(
             resId = this.resId,
+            userId = userId,
             resName = this.resName,
             resRating = this.resRating,
             resCostForOne = this.resCostForOne,

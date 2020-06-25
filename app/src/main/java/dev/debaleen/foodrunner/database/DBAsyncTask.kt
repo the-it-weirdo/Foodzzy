@@ -29,7 +29,7 @@ class DBAsyncTask(
             }
             FavouriteRestaurantsDBTasks.CHECK_FAVOURITE -> {
                 val restaurant: RestaurantEntity? =
-                    db.restaurantDao().getFavouriteRestaurantById(restaurantEntity.resId)
+                    db.restaurantDao().getFavouriteRestaurantById(restaurantEntity.resId, restaurantEntity.userId)
                 db.close()
                 return restaurant != null
             }
@@ -41,14 +41,14 @@ class DBAsyncTask(
     }
 }
 
-class RetrieveFavourites(val context: Context, private val listener: AsyncListener) :
+class RetrieveFavourites(val context: Context, private val listener: AsyncListener, private val userId:String) :
     AsyncTask<Void, Void, List<RestaurantEntity>>() {
 
     private val db =
         Room.databaseBuilder(context, RestaurantDatabase::class.java, "restaurants-db").build()
 
     override fun doInBackground(vararg params: Void?): List<RestaurantEntity> {
-        return db.restaurantDao().getAllFavouriteRestaurants()
+        return db.restaurantDao().getAllFavouriteRestaurants(userId)
     }
 
     override fun onPostExecute(result: List<RestaurantEntity>?) {

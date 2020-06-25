@@ -1,6 +1,7 @@
 package dev.debaleen.foodrunner.fragment
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import dev.debaleen.foodrunner.database.RetrieveFavourites
 import dev.debaleen.foodrunner.database.toListRestaurantUIModel
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.util.FavouriteRestaurantsDBTasks
+import dev.debaleen.foodrunner.util.userIdKey
 
 class FavoriteFragment : Fragment() {
 
@@ -29,11 +31,23 @@ class FavoriteFragment : Fragment() {
 
     private var restaurantList = arrayListOf<RestaurantUIModel>()
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private var userId: String? = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        if (activity != null) {
+            sharedPreferences = activity!!.getSharedPreferences(
+                getString(R.string.preferences_file_name),
+                Context.MODE_PRIVATE
+            )
+        }
+        userId = sharedPreferences.getString(userIdKey, "")
+        if (userId == null) {
+            userId = ""
+        }
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         progressLayout = view.findViewById(R.id.progressLayout)
         progressLayout.visibility = View.VISIBLE
@@ -63,7 +77,7 @@ class FavoriteFragment : Fragment() {
 
                                 override fun onFavouriteClick(position: Int, resId: String) {
                                     removeFromFavourites(
-                                        restaurantList[position].toRestaurantEntity(),
+                                        restaurantList[position].toRestaurantEntity(userId!!),
                                         position
                                     )
                                 }
@@ -76,7 +90,7 @@ class FavoriteFragment : Fragment() {
                         emptyLayout.visibility = View.VISIBLE
                     }
                 }
-            }).execute().get()
+            }, userId!!).execute().get()
 
         return view
     }
@@ -102,7 +116,7 @@ class FavoriteFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
-        if(restaurantList.isEmpty()) {
+        if (restaurantList.isEmpty()) {
             emptyLayout.visibility = View.VISIBLE
         }
     }
