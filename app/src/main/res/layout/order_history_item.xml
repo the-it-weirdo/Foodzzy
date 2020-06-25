@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/padding_default">
+
+    <TextView
+        android:id="@+id/txtRestaurantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_toStartOf="@id/txtDate"
+        android:padding="@dimen/padding_default"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_default"
+        android:textStyle="bold"
+        tools:text="Askin' Poppins" />
+
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/margin_default"
+        android:padding="@dimen/padding_default"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_small"
+        tools:text="12/06/2020" />
+
+    <LinearLayout
+        android:id="@+id/llOrderItemsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtRestaurantName"
+        android:layout_marginTop="@dimen/margin_default"
+        android:orientation="vertical" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llOrderItemsContainer"
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_toStartOf="@id/txtTotalCost"
+        android:padding="@dimen/padding_default"
+        android:layout_alignBottom="@id/txtTotalCost"
+        android:text="@string/total"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_default" />
+
+    <TextView
+        android:id="@+id/txtTotalCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/llOrderItemsContainer"
+        android:layout_alignParentEnd="true"
+        android:textSize="@dimen/text_size_default"
+        android:layout_marginTop="@dimen/margin_default"
+        android:drawableStart="@drawable/ic_rupee_indian"
+        android:drawablePadding="@dimen/padding_small"
+        android:padding="@dimen/padding_default"
+        android:textColor="@color/black"
+        tools:text="410" />
+
+
+</RelativeLayout>

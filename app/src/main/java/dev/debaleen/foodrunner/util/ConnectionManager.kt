@@ -1,8 +1,13 @@
 package dev.debaleen.foodrunner.util
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.provider.Settings
+import androidx.core.app.ActivityCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ConnectionManager {
 
@@ -19,4 +24,23 @@ class ConnectionManager {
             false
         }
     }
+}
+
+fun noInternetDialog(context: Context) {
+    val dialog = MaterialAlertDialogBuilder(context)
+    dialog.setTitle("Error")
+    dialog.setMessage("Internet connection not found.")
+
+    dialog.setPositiveButton("Open Settings") { text, listener ->
+        // Opens settings
+        val settingsIntent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
+        context.startActivity(settingsIntent)
+        (context as Activity).finish()
+    }
+    dialog.setNegativeButton("Exit App") { text, listener ->
+        // Closes app safely
+        ActivityCompat.finishAffinity(context as Activity)
+    }
+    dialog.create()
+    dialog.show()
 }

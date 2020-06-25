@@ -22,8 +22,7 @@ import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.adapter.RestaurantAdapter
 import dev.debaleen.foodrunner.database.DBAsyncTask
 import dev.debaleen.foodrunner.model.RestaurantUIModel
-import dev.debaleen.foodrunner.util.ConnectionManager
-import dev.debaleen.foodrunner.util.FavouriteRestaurantsDBTasks
+import dev.debaleen.foodrunner.util.*
 import org.json.JSONException
 
 class HomeFragment : Fragment() {
@@ -48,11 +47,10 @@ class HomeFragment : Fragment() {
         layoutManager = LinearLayoutManager(activity)
 
         val queue = Volley.newRequestQueue(activity as Context)
-        val url = "http://13.235.250.119/v2/restaurants/fetch_result/"
 
         if (ConnectionManager().checkConnectivity(activity as Context)) {
             val jsonObjectRequest =
-                object : JsonObjectRequest(Method.GET, url, null,
+                object : JsonObjectRequest(Method.GET, FETCH_RESTAURANTS, null,
                     Response.Listener {
 
                         try {
@@ -196,19 +194,19 @@ class HomeFragment : Fragment() {
                     override fun getHeaders(): MutableMap<String, String> {
                         val headers = HashMap<String, String>()
                         headers["Content-type"] = "application/json"
-                        headers["token"] = "141f8efeca1968"
+                        headers["token"] = TOKEN
                         return headers
                     }
                 }
             queue.add(jsonObjectRequest)
         } else {
             // No internet
-            noInternetDialog()
+            noInternetDialog(activity as Context)
         }
         return view
     }
 
-    private fun noInternetDialog() {
+    private fun noInternetDialogs() {
         val dialog = MaterialAlertDialogBuilder(activity as Context)
         dialog.setTitle("Error")
         dialog.setMessage("Internet connection not found.")
@@ -226,6 +224,5 @@ class HomeFragment : Fragment() {
         dialog.create()
         dialog.show()
     }
-
 }
 

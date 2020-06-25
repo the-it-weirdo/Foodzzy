@@ -41,7 +41,7 @@ class DBAsyncTask(
     }
 }
 
-class RetrieveFavourites(val context: Context, val listener: AsyncListener) :
+class RetrieveFavourites(val context: Context, private val listener: AsyncListener) :
     AsyncTask<Void, Void, List<RestaurantEntity>>() {
 
     private val db =
@@ -57,7 +57,7 @@ class RetrieveFavourites(val context: Context, val listener: AsyncListener) :
         super.onPostExecute(result)
     }
 
-    public interface AsyncListener {
+    interface AsyncListener {
         fun publishFavourites(restaurants: List<RestaurantEntity>?)
     }
 }

@@ -8,7 +8,7 @@
     android:layout_marginTop="@dimen/margin_small"
     android:layout_marginEnd="@dimen/margin_default"
     android:layout_marginBottom="@dimen/margin_small"
-    android:background="@color/card_background"
+    android:background="@color/cardBackground"
     app:cardElevation="@dimen/card_elevation"
     app:cardCornerRadius="@dimen/card_corner_radius">
 
@@ -85,7 +85,7 @@
             android:drawablePadding="@dimen/padding_default"
             android:padding="@dimen/padding_default"
             android:textAlignment="viewEnd"
-            android:textColor="@color/favourite_color"
+            android:textColor="@color/starColor"
             android:textSize="@dimen/text_size_small"
             tools:text="4.8" />
 

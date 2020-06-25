@@ -12,7 +12,7 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="card_background">#33FFFFFF</color>
-    <color name="favourite_color">#FFAB00</color>
+    <color name="cardBackground">#33FFFFFF</color>
+    <color name="starColor">#FFAB00</color>
     <color name="colorFavourite">#D50000</color>
 </resources>

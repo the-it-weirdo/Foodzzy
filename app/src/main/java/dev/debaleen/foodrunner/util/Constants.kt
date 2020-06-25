@@ -1,6 +1,17 @@
 package dev.debaleen.foodrunner.util
 
+const val NETWORK_IP = "http://13.235.250.119/v2/"
+const val REGISTER = "$NETWORK_IP/register/fetch_result"
+const val LOGIN = "$NETWORK_IP/login/fetch_result"
+const val FORGOT_PASSWORD = "$NETWORK_IP/forgot_password/fetch_result"
+const val RESET_PASSWORD = "$NETWORK_IP/reset_password/fetch_result"
+const val FETCH_RESTAURANTS = "$NETWORK_IP/restaurants/fetch_result"
+const val PLACE_ORDER = "$NETWORK_IP/place_order/fetch_result"
+const val FETCH_PREVIOUS_ORDERS = "$NETWORK_IP/orders/fetch_result/"
+const val TOKEN = "141f8efeca1968"
+
 const val isLoggedInKey = "isLoggedIn"
+const val userIdKey=  "userId"
 const val userMobileKey = "userMobile"
 const val userPasswordKey = "userPassword"
 const val userEmailKey = "userEmail"
@@ -17,15 +28,3 @@ const val splashActivity = "SplashActivity"
 const val emailRegexString =  "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:" +
         "[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"
 val emailRegex = emailRegexString.toRegex()
-
-enum class InputState {
-    WRONG_MOBILE, WRONG_PASSWORD, OKAY, WRONG_EMAIL, WRONG_NAME, WRONG_ADDRESS, PSW_NO_MATCH
-}
-
-enum class FragmentDestinations {
-    HOME, MY_PROFILE, FAVORITE_RESTAURANTS, FAQs
-}
-
-enum class FavouriteRestaurantsDBTasks {
-    INSERT, DELETE, GET_ALL, CHECK_FAVOURITE
-}

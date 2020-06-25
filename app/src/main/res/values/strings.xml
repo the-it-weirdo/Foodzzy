@@ -40,4 +40,9 @@
     <string name="mobile_number_template">+91-%s</string>
     <string name="question_template">Q.%d. %s</string>
     <string name="answer_template">Answer: %s</string>
+    <string name="order_item_icon_content_description">Order Item Icon</string>
+    <string name="total">Total:</string>
+    <string name="no_orders_made">You haven\'t ordered anything yet. Order some delicious foods.</string>
+    <string name="previous_order_header">Your previous orders:</string>
+    <string name="order_history_menu_title">Order History</string>
 </resources>

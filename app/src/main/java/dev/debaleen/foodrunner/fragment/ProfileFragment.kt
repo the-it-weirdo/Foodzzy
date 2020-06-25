@@ -30,11 +30,10 @@ class ProfileFragment : Fragment() {
     ): View? {
         // Getting the shared preference
         if (activity != null) {
-            sharedPreferences =
-                activity!!.getSharedPreferences(
-                    getString(R.string.preferences_file_name),
-                    Context.MODE_PRIVATE
-                )
+            sharedPreferences = activity!!.getSharedPreferences(
+                getString(R.string.preferences_file_name),
+                Context.MODE_PRIVATE
+            )
         }
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)

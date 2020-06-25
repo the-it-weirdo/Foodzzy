@@ -17,10 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import dev.debaleen.foodrunner.*
-import dev.debaleen.foodrunner.fragment.FaqFragment
-import dev.debaleen.foodrunner.fragment.FavoriteFragment
-import dev.debaleen.foodrunner.fragment.HomeFragment
-import dev.debaleen.foodrunner.fragment.ProfileFragment
+import dev.debaleen.foodrunner.fragment.*
 import dev.debaleen.foodrunner.util.*
 
 class DashboardActivity : AppCompatActivity() {
@@ -54,7 +51,7 @@ class DashboardActivity : AppCompatActivity() {
         txtUserPhone = navigationView.getHeaderView(0).findViewById(R.id.txtUserPhone)
         imgUserProfilePic = navigationView.getHeaderView(0).findViewById(R.id.imgUserProfilePic)
 
-        val userName = sharedPreferences.getString(userNameKey, "Debaleen")
+        val userName = sharedPreferences.getString(userNameKey, "No Name")
         val userPhone = sharedPreferences.getString(userMobileKey, "No phone")
         txtUserName.text = userName
         txtUserPhone.text = getString(R.string.mobile_number_template, userPhone)
@@ -101,6 +98,10 @@ class DashboardActivity : AppCompatActivity() {
 
                 R.id.favorites -> {
                     navigateFromDashboardActivity(FragmentDestinations.FAVORITE_RESTAURANTS)
+                }
+
+                R.id.order_history -> {
+                    navigateFromDashboardActivity(FragmentDestinations.ORDER_HISTORY)
                 }
 
                 R.id.faq -> {
@@ -157,6 +158,7 @@ class DashboardActivity : AppCompatActivity() {
         val fragment = when (destinationFragment) {
             FragmentDestinations.HOME -> HomeFragment()
             FragmentDestinations.MY_PROFILE -> ProfileFragment()
+            FragmentDestinations.ORDER_HISTORY -> OrderHistoryFragment()
             FragmentDestinations.FAVORITE_RESTAURANTS -> FavoriteFragment()
             FragmentDestinations.FAQs -> FaqFragment()
         }
@@ -165,6 +167,7 @@ class DashboardActivity : AppCompatActivity() {
             FragmentDestinations.HOME -> "All Restaurants"
             FragmentDestinations.MY_PROFILE -> "My Profile"
             FragmentDestinations.FAVORITE_RESTAURANTS -> "Favorite Restaurants"
+            FragmentDestinations.ORDER_HISTORY -> "Previous Orders"
             FragmentDestinations.FAQs -> "Frequently Asked Questions"
         }
         val transaction = supportFragmentManager.beginTransaction()

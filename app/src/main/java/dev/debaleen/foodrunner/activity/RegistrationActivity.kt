@@ -8,8 +8,13 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import dev.debaleen.foodrunner.*
 import dev.debaleen.foodrunner.util.*
+import org.json.JSONObject
 
 class RegistrationActivity : AppCompatActivity() {
 
@@ -61,12 +66,6 @@ class RegistrationActivity : AppCompatActivity() {
         navigateToLoginActivity()
     }
 
-    private fun navigateToLoginActivity() {
-        val intent = Intent(this@RegistrationActivity, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
     private fun tryRegister() {
         val name = etName.text.toString()
         val email = etEmail.text.toString()
@@ -94,7 +93,7 @@ class RegistrationActivity : AppCompatActivity() {
                 etConfirmPassword.error = "Passwords do not match!"
             }
             InputState.OKAY -> {
-                navigateToDashboardActivity(name, email, mobile, address, password)
+                sendNetworkRequest(name, mobile, password, address, email)
             }
         }
 
@@ -133,21 +132,72 @@ class RegistrationActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToDashboardActivity(
+    private fun sendNetworkRequest(
         name: String,
-        email: String,
-        mobile: String,
+        mobileNumber: String,
+        password: String,
         address: String,
-        password: String
+        email: String
     ) {
-        // Just for showing what was entered. Not setting Login status to true.
-        saveToPreferences(name, email, mobile, address)
-        val intent = Intent(this@RegistrationActivity, DashboardActivity::class.java)
-        startActivity(intent)
-        finish()
+        if (ConnectionManager().checkConnectivity(this@RegistrationActivity)) {
+            val queue = Volley.newRequestQueue(this@RegistrationActivity)
+
+            val jsonParams = JSONObject()
+            jsonParams.put("name", name)
+            jsonParams.put("mobile_number", mobileNumber)
+            jsonParams.put("password", password)
+            jsonParams.put("address", address)
+            jsonParams.put("email", email)
+
+            val jsonRequest =
+                object : JsonObjectRequest(Method.POST, REGISTER, jsonParams, Response.Listener {
+                    try {
+                        val returnObject = it.getJSONObject("data")
+                        val success = returnObject.getBoolean("success")
+
+                        if (success) {
+                            val data = returnObject.getJSONObject("data")
+                            val userId = data.getString("user_id")
+                            val userName = data.getString("name")
+                            val userEmail = data.getString("email")
+                            val userMobileNumber = data.getString("mobile_number")
+                            val userAddress = data.getString("address")
+                            saveToPreferences(
+                                userId,
+                                userName,
+                                userEmail,
+                                userMobileNumber,
+                                userAddress
+                            )
+                            navigateToDashboardActivity()
+                        } else {
+                            val errorMessage = returnObject.getString("errorMessage")
+                            Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }, Response.ErrorListener {
+                    Toast.makeText(applicationContext, it.localizedMessage, Toast.LENGTH_SHORT)
+                        .show()
+                }) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val headers = HashMap<String, String>()
+                        headers["Content-type"] = "application/json"
+                        headers["token"] = TOKEN
+                        return headers
+                    }
+                }
+            queue.add(jsonRequest)
+        } else {
+            noInternetDialog(this@RegistrationActivity)
+        }
     }
 
     private fun saveToPreferences(
+        userId: String,
         name: String,
         email: String,
         mobile: String,
@@ -155,10 +205,23 @@ class RegistrationActivity : AppCompatActivity() {
     ) {
         sharedPreferences.edit()
             .putBoolean(isLoggedInKey, true)
+            .putString(userIdKey, userId)
             .putString(userNameKey, name)
             .putString(userMobileKey, mobile)
             .putString(userEmailKey, email)
             .putString(userAddressKey, address)
             .apply()
+    }
+
+    private fun navigateToLoginActivity() {
+        val intent = Intent(this@RegistrationActivity, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToDashboardActivity() {
+        val intent = Intent(this@RegistrationActivity, DashboardActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
