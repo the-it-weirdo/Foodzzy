@@ -9,7 +9,11 @@ enum class FragmentDestinations {
 }
 
 enum class FavouriteRestaurantsDBTasks {
-    INSERT, DELETE, GET_ALL, CHECK_FAVOURITE
+    INSERT, DELETE, CHECK_FAVOURITE
+}
+
+enum class CartDBTasks {
+    INSERT, DELETE
 }
 
 enum class LoginActivityDestinations {

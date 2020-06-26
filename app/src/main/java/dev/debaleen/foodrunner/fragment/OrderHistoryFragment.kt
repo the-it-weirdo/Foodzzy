@@ -86,7 +86,7 @@ class OrderHistoryFragment : Fragment() {
                                         restaurantName = orderHistoryJsonObject.getString("restaurant_name"),
                                         totalCost = orderHistoryJsonObject.getString("total_cost"),
                                         orderPlacedAt = orderHistoryJsonObject.getString("order_placed_at"),
-                                        foodItems = orderHistoryJsonObject.getJSONArray("food_items")
+                                        orderFoodItems = orderHistoryJsonObject.getJSONArray("food_items")
                                             .toFoodItemList()
                                     )
                                     orderHistoryList.add(orderHistoryItem)

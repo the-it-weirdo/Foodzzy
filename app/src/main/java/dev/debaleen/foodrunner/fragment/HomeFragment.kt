@@ -1,6 +1,7 @@
 package dev.debaleen.foodrunner.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,8 +16,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import dev.debaleen.foodrunner.R
+import dev.debaleen.foodrunner.activity.RestaurantDetailActivity
 import dev.debaleen.foodrunner.adapter.RestaurantAdapter
-import dev.debaleen.foodrunner.database.DBAsyncTask
+import dev.debaleen.foodrunner.database.FavouriteDBAsyncTask
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONException
@@ -78,7 +80,7 @@ class HomeFragment : Fragment() {
                                         resCostForOne = restaurantJsonObject.getString("cost_for_one"),
                                         resImageUrl = restaurantJsonObject.getString("image_url")
                                     )
-                                    restaurantObject.isFavourite = DBAsyncTask(
+                                    restaurantObject.isFavourite = FavouriteDBAsyncTask(
                                         activity as Context,
                                         restaurantObject.toRestaurantEntity(userId!!),
                                         FavouriteRestaurantsDBTasks.CHECK_FAVOURITE
@@ -93,24 +95,20 @@ class HomeFragment : Fragment() {
                                                     position: Int,
                                                     resId: String
                                                 ) {
-                                                    Toast.makeText(
-                                                        context,
-                                                        " ${restaurantList[position].resName} with id: $resId clicked.",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    navigateToRestaurantDetailsActivity(restaurantList[position].resName, resId)
                                                 }
 
                                                 override fun onFavouriteClick(
                                                     position: Int,
                                                     resId: String
                                                 ) {
-                                                    if (!DBAsyncTask(
+                                                    if (!FavouriteDBAsyncTask(
                                                             activity as Context,
                                                             restaurantList[position].toRestaurantEntity(userId!!),
                                                             FavouriteRestaurantsDBTasks.CHECK_FAVOURITE
                                                         ).execute().get()
                                                     ) {
-                                                        val async = DBAsyncTask(
+                                                        val async = FavouriteDBAsyncTask(
                                                             activity as Context,
                                                             restaurantList[position].toRestaurantEntity(userId!!),
                                                             FavouriteRestaurantsDBTasks.INSERT
@@ -135,7 +133,7 @@ class HomeFragment : Fragment() {
                                                             ).show()
                                                         }
                                                     } else {
-                                                        val async = DBAsyncTask(
+                                                        val async = FavouriteDBAsyncTask(
                                                             activity as Context,
                                                             restaurantList[position].toRestaurantEntity(userId!!),
                                                             FavouriteRestaurantsDBTasks.DELETE
@@ -213,6 +211,14 @@ class HomeFragment : Fragment() {
             noInternetDialog(activity as Context)
         }
         return view
+    }
+
+    private fun navigateToRestaurantDetailsActivity(resName: String, resId: String) {
+        val intent = Intent(activity, RestaurantDetailActivity::class.java)
+        intent.putExtra(restaurantNameKey, resName)
+        intent.putExtra(restaurantIdKey, resId)
+        startActivity(intent)
+        activity?.finish()
     }
 }
 

@@ -45,4 +45,9 @@
     <string name="no_orders_made">You haven\'t ordered anything yet. Order some delicious foods.</string>
     <string name="previous_order_header">Your previous orders:</string>
     <string name="order_history_menu_title">Order History</string>
+    <string name="btn_text_add">Add</string>
+    <string name="btn_text_remove">Remove</string>
+    <string name="restaurant_details_header">Choose from the menu listed below:</string>
+    <string name="error_string">Some unexpected error occurred. Try again later.</string>
+    <string name="go_to_cart">Go to Cart</string>
 </resources>

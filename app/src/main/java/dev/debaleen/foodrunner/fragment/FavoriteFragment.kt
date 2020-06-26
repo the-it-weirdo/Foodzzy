@@ -1,6 +1,7 @@
 package dev.debaleen.foodrunner.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,13 +13,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.debaleen.foodrunner.R
+import dev.debaleen.foodrunner.activity.RestaurantDetailActivity
 import dev.debaleen.foodrunner.adapter.RestaurantAdapter
-import dev.debaleen.foodrunner.database.DBAsyncTask
-import dev.debaleen.foodrunner.database.RestaurantEntity
-import dev.debaleen.foodrunner.database.RetrieveFavourites
-import dev.debaleen.foodrunner.database.toListRestaurantUIModel
+import dev.debaleen.foodrunner.database.*
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.util.FavouriteRestaurantsDBTasks
+import dev.debaleen.foodrunner.util.restaurantIdKey
+import dev.debaleen.foodrunner.util.restaurantNameKey
 import dev.debaleen.foodrunner.util.userIdKey
 
 class FavoriteFragment : Fragment() {
@@ -56,47 +57,53 @@ class FavoriteFragment : Fragment() {
         recyclerFavourite = view.findViewById(R.id.recyclerFavourite)
         recyclerFavourite.setHasFixedSize(true)
 
-        RetrieveFavourites(activity as Context,
-            object : RetrieveFavourites.AsyncListener {
-                override fun publishFavourites(restaurants: List<RestaurantEntity>?) {
+        val restaurantsListFromDB = RetrieveFavouritesAsyncTask(
+            activity as Context,
+            object : AsyncTaskCompleteListener {
+                override fun onTaskComplete() {
                     progressLayout.visibility = View.GONE
-                    if (restaurants != null && restaurants.isNotEmpty()) {
-                        restaurantList = ArrayList(restaurants.toListRestaurantUIModel())
-                        restaurantList.forEach {
-                            it.isFavourite = true
-                        }
-                        recyclerAdapter = RestaurantAdapter(restaurantList,
-                            object : RestaurantAdapter.RestaurantClickListener {
-                                override fun onRestaurantClick(position: Int, resId: String) {
-                                    Toast.makeText(
-                                        context,
-                                        " ${restaurantList[position].resName} with id: $resId clicked.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                                override fun onFavouriteClick(position: Int, resId: String) {
-                                    removeFromFavourites(
-                                        restaurantList[position].toRestaurantEntity(userId!!),
-                                        position
-                                    )
-                                }
-                            })
-
-                        layoutManager = LinearLayoutManager(activity as Context)
-                        recyclerFavourite.adapter = recyclerAdapter
-                        recyclerFavourite.layoutManager = layoutManager
-                    } else {
-                        emptyLayout.visibility = View.VISIBLE
-                    }
                 }
-            }, userId!!).execute().get()
+            }, userId!!
+        ).execute().get()
 
+        if (restaurantsListFromDB.isNotEmpty()) {
+            restaurantList = ArrayList(restaurantsListFromDB.toListRestaurantUIModel())
+            restaurantList.forEach {
+                it.isFavourite = true
+            }
+            recyclerAdapter = RestaurantAdapter(restaurantList,
+                object : RestaurantAdapter.RestaurantClickListener {
+                    override fun onRestaurantClick(position: Int, resId: String) {
+                        navigateToRestaurantDetailsActivity(
+                            restaurantList[position].resName,
+                            resId
+                        )
+                    }
+
+                    override fun onFavouriteClick(position: Int, resId: String) {
+                        /* Since we are in Favourites Fragment, Clicking in Favourite Button can only mean removing
+                         from favourites list. On removal from favourites list, we also remove the Restaurant
+                         from the RecyclerView to ensure that we cannot add this Restaurant to the favourites list
+                         from the Favourite fragment. We can only add favourite fragments from the Home Fragment.
+                         */
+                        removeFromFavourites(
+                            restaurantList[position].toRestaurantEntity(userId!!),
+                            position
+                        )
+                    }
+                })
+
+            layoutManager = LinearLayoutManager(activity as Context)
+            recyclerFavourite.adapter = recyclerAdapter
+            recyclerFavourite.layoutManager = layoutManager
+        } else {
+            emptyLayout.visibility = View.VISIBLE
+        }
         return view
     }
 
     fun removeFromFavourites(restaurantEntity: RestaurantEntity, position: Int) {
-        val result = DBAsyncTask(
+        val result = FavouriteDBAsyncTask(
             activity as Context,
             restaurantEntity,
             FavouriteRestaurantsDBTasks.DELETE
@@ -121,4 +128,11 @@ class FavoriteFragment : Fragment() {
         }
     }
 
+    private fun navigateToRestaurantDetailsActivity(resName: String, resId: String) {
+        val intent = Intent(activity, RestaurantDetailActivity::class.java)
+        intent.putExtra(restaurantNameKey, resName)
+        intent.putExtra(restaurantIdKey, resId)
+        startActivity(intent)
+        activity?.finish()
+    }
 }

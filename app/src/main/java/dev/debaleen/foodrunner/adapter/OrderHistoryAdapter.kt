@@ -50,7 +50,7 @@ class OrderHistoryAdapter(private val orderHistoryList: ArrayList<OrderHistoryIt
             }
             txtTotalCost.text = orderHistoryItem.totalCost
 
-            for (item in orderHistoryItem.foodItems) {
+            for (item in orderHistoryItem.orderFoodItems) {
                 val foodItemView = LayoutInflater.from(view.context)
                     .inflate(R.layout.order_items, container, false)
                 val txtItemName: TextView = foodItemView.findViewById(R.id.txtItemName)
