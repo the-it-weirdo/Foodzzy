@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,103 +14,46 @@
         android:scaleX="2"
         tools:ignore="ContentDescription" />
 
+    <ProgressBar
+        android:id="@+id/progressLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:elevation="@dimen/elevation_large" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:elevation="@dimen/elevation_default">
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center">
 
-        <ImageView
-            android:id="@+id/imgAppLogo"
-            android:layout_width="@dimen/logo_width"
-            android:layout_height="@dimen/logo_height"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_x_large"
-            android:layout_marginBottom="@dimen/margin_x_large"
-            android:contentDescription="@string/content_app_logo"
-            android:src="@drawable/foodiction_edited" />
-
-        <EditText
-            android:id="@+id/etMobileNumber"
+        <TextView
+            android:id="@+id/txtAppName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imgAppLogo"
-            android:layout_marginStart="@dimen/margin_large"
-            android:layout_marginEnd="@dimen/margin_large"
             android:layout_marginBottom="@dimen/margin_default"
-            android:background="@color/white"
-            android:drawableStart="@drawable/ic_mobile"
-            android:drawablePadding="@dimen/padding_small"
-            android:hint="@string/mobile_number_hint"
-            android:inputType="phone"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:padding="@dimen/padding_large"
-            tools:ignore="Autofill" />
-
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/etMobileNumber"
-            android:layout_marginStart="@dimen/margin_large"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_default"
-            android:background="@color/white"
-            android:drawableStart="@drawable/ic_password"
-            android:drawablePadding="@dimen/padding_small"
-            android:hint="@string/password_hint"
-            android:inputType="textPassword"
-            android:maxLines="1"
-            android:padding="@dimen/padding_large"
-            tools:ignore="Autofill" />
-
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/etPassword"
-            android:layout_marginStart="@dimen/margin_large"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_default"
-            android:background="@color/secondaryColor"
-            android:backgroundTint="@color/secondaryColor"
-            android:text="@string/login_button_text"
+            android:text="@string/app_name"
             android:textAlignment="center"
-            android:textAllCaps="false"
             android:textColor="@color/secondaryTextColor"
-            android:textSize="@dimen/text_size_default" />
+            android:textSize="40sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtForgotPassword"
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnLogin"
-            android:layout_marginStart="@dimen/margin_large"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:text="@string/forgot_password"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_default" />
+            android:layout_below="@id/txtAppName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="@dimen/margin_x_large"
+            android:layout_marginEnd="@dimen/margin_x_large"
+            android:layout_marginBottom="@dimen/margin_default"
+            app:cardBackgroundColor="#E6FFFFFF"
+            app:cardCornerRadius="@dimen/card_corner_radius_large"
+            app:cardElevation="10dp">
 
-        <TextView
-            android:id="@+id/txtRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="@dimen/margin_large"
-            android:layout_marginEnd="@dimen/margin_large"
-            android:layout_marginBottom="@dimen/margin_large"
-            android:text="@string/register_hint"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_default" />
+            <include layout="@layout/content_login" />
+
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
-
 
 </RelativeLayout>

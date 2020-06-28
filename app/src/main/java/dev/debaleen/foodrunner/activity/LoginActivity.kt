@@ -5,10 +5,11 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.android.volley.Request
 import com.android.volley.VolleyError
+import com.google.android.material.textfield.TextInputEditText
 import dev.debaleen.foodrunner.*
 import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.util.*
@@ -16,11 +17,12 @@ import org.json.JSONObject
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var etMobileNumber: EditText
-    private lateinit var etPassword: EditText
+    private lateinit var etMobileNumber: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
     private lateinit var btnLogin: Button
     private lateinit var txtForgotPassword: TextView
     private lateinit var txtRegister: TextView
+    private lateinit var progressLayout: ProgressBar
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -33,6 +35,8 @@ class LoginActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_login)
 
+        progressLayout = findViewById(R.id.progressLayout)
+        progressLayout.hide()
         etMobileNumber = findViewById(R.id.etMobileNumber)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btnLogin)
@@ -55,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
     private fun setupNetworkTaskListener() {
         networkTaskListener = object : NetworkTask.NetworkTaskListener {
             override fun onSuccess(result: JSONObject) {
+                progressLayout.hide()
                 try {
                     val returnObject = result.getJSONObject("data")
                     val success = returnObject.getBoolean("success")
@@ -67,17 +72,24 @@ class LoginActivity : AppCompatActivity() {
                         val userMobile = data.getString("mobile_number")
                         val userAddress = data.getString("address")
                         saveToPreferences(userId, userName, userEmail, userMobile, userAddress)
+
+                        // Since, we are navigating from LoginActivity and stopping the activity(finish())
+                        // after navigation, we do not need to enable the disabled login button.
+
                         navigateFromLoginActivity(LoginActivityDestinations.DASHBOARD)
                     } else {
+                        btnLogin.enable()
                         val errorMessage = returnObject.getString("errorMessage")
                         showToast(errorMessage)
                     }
                 } catch (e: Exception) {
+                    btnLogin.enable()
                     showToast("Error: ${e.localizedMessage}")
                 }
             }
 
             override fun onFailed(error: VolleyError) {
+                btnLogin.enable()
                 showToast("Error: ${error.localizedMessage}")
             }
         }
@@ -92,10 +104,10 @@ class LoginActivity : AppCompatActivity() {
                 sendNetworkRequest(mobileNumber, password)
             }
             InputState.WRONG_PASSWORD -> {
-                etPassword.error = "Wrong Password"
+                etPassword.error = "Invalid Password"
             }
             InputState.WRONG_MOBILE -> {
-                etMobileNumber.error = "Wrong mobile."
+                etMobileNumber.error = "Invalid mobile."
             }
             else -> {
                 showToast("Unknown Input State.")
@@ -120,6 +132,9 @@ class LoginActivity : AppCompatActivity() {
     private fun sendNetworkRequest(mobileNumber: String, password: String) {
         if (ConnectionManager().checkConnectivity(this@LoginActivity)) {
             setupNetworkTaskListener()
+
+            progressLayout.show()
+            btnLogin.disable()
 
             val jsonParams = JSONObject()
             jsonParams.put("mobile_number", mobileNumber)

@@ -6,9 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.EditText
+import android.widget.ProgressBar
 import com.android.volley.Request
 import com.android.volley.VolleyError
+import com.google.android.material.textfield.TextInputEditText
 import dev.debaleen.foodrunner.*
 import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.util.*
@@ -18,12 +19,13 @@ class RegistrationActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    private lateinit var etName: EditText
-    private lateinit var etEmail: EditText
-    private lateinit var etMobileNumber: EditText
-    private lateinit var etDeliveryAddress: EditText
-    private lateinit var etPassword: EditText
-    private lateinit var etConfirmPassword: EditText
+    private lateinit var progressLayout: ProgressBar
+    private lateinit var etName: TextInputEditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etMobileNumber: TextInputEditText
+    private lateinit var etDeliveryAddress: TextInputEditText
+    private lateinit var etPassword: TextInputEditText
+    private lateinit var etConfirmPassword: TextInputEditText
     private lateinit var btnRegister: Button
 
     private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
@@ -38,6 +40,8 @@ class RegistrationActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
+        progressLayout = findViewById(R.id.progressLayout)
+        progressLayout.hide()
         etName = findViewById(R.id.etName)
         etEmail = findViewById(R.id.etEmail)
         etMobileNumber = findViewById(R.id.etMobileNumber)
@@ -130,6 +134,9 @@ class RegistrationActivity : AppCompatActivity() {
         name: String, mobileNumber: String, password: String, address: String, email: String
     ) {
         if (ConnectionManager().checkConnectivity(this@RegistrationActivity)) {
+            progressLayout.show()
+            btnRegister.disable()
+
             setupNetworkTaskListener()
 
             val jsonParams = JSONObject()
@@ -151,6 +158,8 @@ class RegistrationActivity : AppCompatActivity() {
         networkTaskListener =
             object : NetworkTask.NetworkTaskListener {
                 override fun onSuccess(result: JSONObject) {
+                    progressLayout.hide()
+
                     try {
                         val returnObject = result.getJSONObject("data")
                         val success = returnObject.getBoolean("success")
@@ -165,17 +174,22 @@ class RegistrationActivity : AppCompatActivity() {
                             saveToPreferences(
                                 userId, userName, userEmail, userMobileNumber, userAddress
                             )
+                            // Since, we are navigating from RegistrationActivity and stopping the activity(finish())
+                            // after navigation, we do not need to enable the disabled Register button.
                             navigateToDashboardActivity()
                         } else {
+                            btnRegister.enable()
                             val errorMessage = returnObject.getString("errorMessage")
                             showToast(errorMessage)
                         }
                     } catch (e: Exception) {
+                        btnRegister.enable()
                         showToast("Error: ${e.localizedMessage}")
                     }
                 }
 
                 override fun onFailed(error: VolleyError) {
+                    btnRegister.enable()
                     showToast("Error: ${error.localizedMessage}")
                 }
             }

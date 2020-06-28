@@ -10,6 +10,7 @@
     <color name="secondaryTextColor">#ffffff</color>
 
 
+    <color name="semi_transparent">#CCFFFFFF</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="cardBackground">#33FFFFFF</color>

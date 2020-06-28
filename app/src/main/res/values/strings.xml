@@ -6,7 +6,7 @@
     <string name="password_hint">Password</string>
     <string name="login_button_text">Login</string>
     <string name="forgot_password"><u>Forgot Password?</u></string>
-    <string name="register_hint"><u>Don\'t have an account? Sign up now</u></string>
+    <string name="register_hint"><u>Don\'t have an account?\nSign up now</u></string>
     <string name="registration_activity_title">Register Yourself</string>
     <string name="name_hint">Name(Min. 3 characters)</string>
     <string name="email_address_hint">Email Address</string>

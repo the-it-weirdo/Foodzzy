@@ -31,13 +31,13 @@ fun noInternetDialog(context: Context) {
     dialog.setTitle("Error")
     dialog.setMessage("Internet connection not found.")
 
-    dialog.setPositiveButton("Open Settings") { text, listener ->
+    dialog.setPositiveButton("Open Settings") { _, _ ->
         // Opens settings
         val settingsIntent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
         context.startActivity(settingsIntent)
         //(context as Activity).finish()
     }
-    dialog.setNegativeButton("Exit App") { text, listener ->
+    dialog.setNegativeButton("Exit App") { _, _ ->
         // Closes app safely
         ActivityCompat.finishAffinity(context as Activity)
     }
