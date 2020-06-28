@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.model.OrderHistoryItem
@@ -12,8 +13,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class OrderHistoryAdapter(private val orderHistoryList: ArrayList<OrderHistoryItem>) :
+class OrderHistoryAdapter(private var orderHistoryList: ArrayList<OrderHistoryItem>) :
     RecyclerView.Adapter<OrderHistoryAdapter.OrderHistoryViewHolder>() {
+
+    fun updateList(newList: ArrayList<OrderHistoryItem>) {
+        orderHistoryList = newList
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderHistoryViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -34,7 +40,7 @@ class OrderHistoryAdapter(private val orderHistoryList: ArrayList<OrderHistoryIt
     class OrderHistoryViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         private val txtRestaurantName: TextView = view.findViewById(R.id.txtRestaurantName)
         private val txtDate: TextView = view.findViewById(R.id.txtDate)
-        private val container: LinearLayout = view.findViewById(R.id.llOrderItemsContainer)
+        private val container: RecyclerView = view.findViewById(R.id.orderItemsRecycler)
         private val txtTotalCost: TextView = view.findViewById(R.id.txtTotalCost)
 
         fun bind(orderHistoryItem: OrderHistoryItem) {
@@ -49,17 +55,21 @@ class OrderHistoryAdapter(private val orderHistoryList: ArrayList<OrderHistoryIt
                 txtDate.text = dateStr
             }
             txtTotalCost.text = orderHistoryItem.totalCost
+            val o = orderHistoryItem.orderFoodItems
 
-            for (item in orderHistoryItem.orderFoodItems) {
+            container.layoutManager = LinearLayoutManager(container.context)
+            container.adapter = CartAdapter(ArrayList(orderHistoryItem.orderFoodItems))
+
+            /*for (item in orderHistoryItem.orderFoodItems) {
                 val foodItemView = LayoutInflater.from(view.context)
                     .inflate(R.layout.order_items, container, false)
                 val txtItemName: TextView = foodItemView.findViewById(R.id.txtItemName)
                 val txtOrderItemPrice: TextView = foodItemView.findViewById(R.id.txtOrderItemPrice)
                 txtItemName.text = item.name
-                txtOrderItemPrice.text = item.cost
+                txtOrderItemPrice.text = item.costForOne
 
                 container.addView(foodItemView)
-            }
+            }*/
         }
     }
 }

@@ -197,11 +197,7 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun saveToPreferences(
-        userId: String,
-        name: String,
-        email: String,
-        mobile: String,
-        address: String
+        userId: String, name: String, email: String, mobile: String, address: String
     ) {
         sharedPreferences.edit()
             .putBoolean(isLoggedInKey, true)

@@ -13,11 +13,15 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 
 class RestaurantAdapter(
-    private val itemList: ArrayList<RestaurantUIModel>,
+    private var itemList: ArrayList<RestaurantUIModel>,
     private val clickListener: RestaurantClickListener
 ) :
     RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
 
+    fun updateList(newList: ArrayList<RestaurantUIModel>) {
+        itemList = newList
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantViewHolder {
         val view = LayoutInflater.from(parent.context)

@@ -12,19 +12,3 @@ data class CartElementEntity(
 ) {
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "element_id") var elementId: Int? = null
 }
-
-
-/*
-@Entity
-data class Food(
-        var foodName: String,
-        var foodDesc: String,
-        var protein: Double,
-        var carbs: Double,
-        var fat: Double
-){
-    @PrimaryKey(autoGenerate = true)
-    var foodId: Int = 0 // or foodId: Int? = null
-    var calories: Double = 0.toDouble()
-}
- */

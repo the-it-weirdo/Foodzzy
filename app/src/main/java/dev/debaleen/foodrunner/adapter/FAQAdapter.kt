@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.debaleen.foodrunner.R
-import dev.debaleen.foodrunner.model.FAQUIModel
+import dev.debaleen.foodrunner.model.FAQModel
 
 class FAQAdapter(
-    private val faqsList: ArrayList<FAQUIModel>
+    private val faqsList: ArrayList<FAQModel>
 ) : RecyclerView.Adapter<FAQAdapter.FAQViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FAQViewHolder {
@@ -34,7 +34,7 @@ class FAQAdapter(
         private val txtQuestion: TextView = view.findViewById(R.id.txtQuestion)
         private val txtAnswer: TextView = view.findViewById(R.id.txtAnswer)
 
-        fun bind(faqUiModel: FAQUIModel, position: Int) {
+        fun bind(faqUiModel: FAQModel, position: Int) {
             txtQuestion.text = view.context.getString(
                 R.string.question_template,
                 position + 1,

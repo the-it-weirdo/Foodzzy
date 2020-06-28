@@ -12,6 +12,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import dev.debaleen.foodrunner.R
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
@@ -20,10 +21,7 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import dev.debaleen.foodrunner.adapter.RestaurantDetailAdapter
-import dev.debaleen.foodrunner.database.AsyncTaskCompleteListener
-import dev.debaleen.foodrunner.database.CartDBAsyncTasks
-import dev.debaleen.foodrunner.database.CartElementEntity
-import dev.debaleen.foodrunner.database.ClearCartAsyncTask
+import dev.debaleen.foodrunner.database.*
 import dev.debaleen.foodrunner.model.RestaurantFoodItem
 import dev.debaleen.foodrunner.model.toRestaurantFoodItemList
 import dev.debaleen.foodrunner.util.*
@@ -72,18 +70,15 @@ class RestaurantDetailActivity : AppCompatActivity() {
         recyclerAdapter = RestaurantDetailAdapter(menuList,
             object : RestaurantDetailAdapter.CartButtonListener {
                 override fun onAddToCartButtonClick(position: Int, foodItem: RestaurantFoodItem) {
-                    orderList.add(foodItem)
-                    if (orderList.isNotEmpty()) {
+                    if (orderList.add(foodItem) && orderList.isNotEmpty()) {
                         btnGoToCart.visibility = View.VISIBLE
                     }
                 }
 
                 override fun onRemoveFromButtonClicked(
-                    position: Int,
-                    foodItem: RestaurantFoodItem
+                    position: Int, foodItem: RestaurantFoodItem
                 ) {
-                    orderList.remove(foodItem)
-                    if (orderList.isEmpty()) {
+                    if (orderList.remove(foodItem) && orderList.isEmpty()) {
                         btnGoToCart.visibility = View.GONE
                     }
                 }
@@ -93,11 +88,22 @@ class RestaurantDetailActivity : AppCompatActivity() {
         recyclerRestaurantDetails.adapter = recyclerAdapter
 
         btnGoToCart.setOnClickListener {
-            navigateToCart()
+            // To prevent double clicks on 'Go to cart' button
+            btnGoToCart.isEnabled = false
+            buildCart()
         }
 
         setUpToolbar()
         makeNetworkRequest()
+    }
+
+    override fun onResume() {
+        // Since the 'Go to Cart' button was disabled on click, we need to re-enable it when user
+        // scrolls back to this activity from CartActivity
+        // This won't affect if the activity is created for the first time as the button will not be
+        // visible then.
+        btnGoToCart.isEnabled = true
+        super.onResume()
     }
 
     private fun setUpToolbar() {
@@ -125,7 +131,13 @@ class RestaurantDetailActivity : AppCompatActivity() {
                                 if (foodsArray.length() == 0) {
                                     emptyLayout.visibility = View.VISIBLE
                                 } else {
-                                    menuList = ArrayList(foodsArray.toRestaurantFoodItemList())
+                                    menuList = ArrayList(
+                                        foodsArray.toRestaurantFoodItemList(
+                                            "id",
+                                            "name",
+                                            "cost_for_one"
+                                        )
+                                    )
                                     recyclerAdapter.updateDataList(menuList)
                                 }
                             } else {
@@ -137,9 +149,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                             }
                         } catch (e: Exception) {
                             Toast.makeText(
-                                applicationContext,
-                                e.localizedMessage,
-                                Toast.LENGTH_SHORT
+                                applicationContext, e.localizedMessage, Toast.LENGTH_SHORT
                             ).show()
                         }
                     },
@@ -166,21 +176,19 @@ class RestaurantDetailActivity : AppCompatActivity() {
         val id = item.itemId
 
         if (id == android.R.id.home) {
-            if (orderList.isNotEmpty()) {
-                clearCartDialog()
-            } else {
-                navigateToDashboardActivity()
-            }
+            onBackPressed()
         }
 
         return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
-        if (orderList.isNotEmpty()) {
-            clearCartDialog()
-        } else {
+        if (orderList.isEmpty()) {
             navigateToDashboardActivity()
+        } else {
+            // If there's item in the cart, the user should be able to see the cart.
+            btnGoToCart.visibility = View.VISIBLE
+            clearCartDialog()
         }
     }
 
@@ -189,7 +197,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         dialog.setTitle("Confirmation")
         dialog.setMessage("Going back will clear the cart. Are you sure you want to go back?")
 
-        dialog.setPositiveButton("YES") { text, listener ->
+        dialog.setPositiveButton("YES") { _, _ ->
             ClearCartAsyncTask(this@RestaurantDetailActivity,
                 userId, restaurantId,
                 object : AsyncTaskCompleteListener {
@@ -203,7 +211,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                     }
                 }).execute()
         }
-        dialog.setNegativeButton("NO") { text, listener ->
+        dialog.setNegativeButton("NO") { _, _ ->
             // Do Nothing
         }
         dialog.setCancelable(false)
@@ -211,10 +219,10 @@ class RestaurantDetailActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun navigateToCart() {
-        val gson = Gson()
+    private fun buildCart() {
+        val gSonObject = Gson()
 
-        val foodItems = gson.toJson(orderList)
+        val foodItems = gSonObject.toJson(orderList)
 
         val result = CartDBAsyncTasks(
             this@RestaurantDetailActivity,
@@ -223,13 +231,8 @@ class RestaurantDetailActivity : AppCompatActivity() {
         ).execute().get()
 
         if (result) {
-            orderList.clear()
-            Toast.makeText(
-                this@RestaurantDetailActivity,
-                "Going to cart.",
-                Toast.LENGTH_SHORT
-            ).show()
-            // TODO("Create intent and put resName and resKey and navigate to Cart screen")
+            navigateToCartActivity()
+            // Reset layout on navigation
         } else {
             Toast.makeText(
                 this@RestaurantDetailActivity,
@@ -243,6 +246,13 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private fun navigateToDashboardActivity() {
         val intent = Intent(this@RestaurantDetailActivity, DashboardActivity::class.java)
         startActivity(intent)
-        finish()
+        ActivityCompat.finishAffinity(this)
+    }
+
+    private fun navigateToCartActivity() {
+        val intent = Intent(this@RestaurantDetailActivity, CartActivity::class.java)
+        intent.putExtra(restaurantNameKey, restaurantName)
+        intent.putExtra(restaurantIdKey, restaurantId)
+        startActivity(intent)
     }
 }

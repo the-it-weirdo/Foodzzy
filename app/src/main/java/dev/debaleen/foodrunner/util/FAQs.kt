@@ -1,6 +1,6 @@
 package dev.debaleen.foodrunner.util
 
-import dev.debaleen.foodrunner.model.FAQUIModel
+import dev.debaleen.foodrunner.model.FAQModel
 
 val faqs = hashMapOf<String, String>(
     Pair("Show an example of placeholder text.", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."),
@@ -15,12 +15,12 @@ val faqs = hashMapOf<String, String>(
             "Est ultricies integer quis auctor elit sed. Malesuada fames ac turpis egestas sed tempus urna et. Nam aliquam sem et tortor consequat id porta. Viverra nibh cras pulvinar mattis. Commodo viverra maecenas accumsan lacus vel facilisis volutpat est velit. Cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam. Tellus pellentesque eu tincidunt tortor aliquam. Facilisi morbi tempus iaculis urna id. Enim ut tellus elementum sagittis. Nisi quis eleifend quam adipiscing vitae proin sagittis nisl rhoncus. Varius sit amet mattis vulputate enim. Id diam maecenas ultricies mi eget mauris pharetra et. Faucibus vitae aliquet nec ullamcorper. In nulla posuere sollicitudin aliquam ultrices sagittis orci a. Blandit libero volutpat sed cras ornare arcu dui. Dolor sed viverra ipsum nunc aliquet bibendum enim facilisis. Consectetur adipiscing elit ut aliquam purus. Egestas congue quisque egestas diam in arcu. Libero nunc consequat interdum varius sit amet.")
 )
 
-fun formFaqs(faqs: HashMap<String, String>): ArrayList<FAQUIModel> {
-    val returnList = arrayListOf<FAQUIModel>()
+fun formFaqs(faqs: HashMap<String, String>): ArrayList<FAQModel> {
+    val returnList = arrayListOf<FAQModel>()
 
     faqs.map {
         returnList.add(
-            FAQUIModel(
+            FAQModel(
                 question = it.key,
                 answer = it.value
             )

@@ -35,7 +35,7 @@ fun noInternetDialog(context: Context) {
         // Opens settings
         val settingsIntent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
         context.startActivity(settingsIntent)
-        (context as Activity).finish()
+        //(context as Activity).finish()
     }
     dialog.setNegativeButton("Exit App") { text, listener ->
         // Closes app safely

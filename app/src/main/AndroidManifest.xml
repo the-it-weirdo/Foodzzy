@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.RestaurantDetailActivity"></activity>
+        <activity android:name=".activity.CartActivity"></activity>
+        <activity android:name=".activity.RestaurantDetailActivity" />
         <activity android:name=".activity.DashboardActivity" />
         <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".activity.RegistrationActivity" />

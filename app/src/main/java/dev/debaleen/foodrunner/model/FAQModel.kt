@@ -1,6 +1,6 @@
 package dev.debaleen.foodrunner.model
 
-data class FAQUIModel(
+data class FAQModel(
     val question: String,
     val answer: String
 )

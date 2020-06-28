@@ -1,6 +1,5 @@
 package dev.debaleen.foodrunner.fragment
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,10 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import dev.debaleen.foodrunner.R
-import dev.debaleen.foodrunner.util.userAddressKey
-import dev.debaleen.foodrunner.util.userEmailKey
-import dev.debaleen.foodrunner.util.userMobileKey
-import dev.debaleen.foodrunner.util.userNameKey
+import dev.debaleen.foodrunner.util.*
 
 class ProfileFragment : Fragment() {
 
@@ -29,12 +25,7 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Getting the shared preference
-        if (activity != null) {
-            sharedPreferences = activity!!.getSharedPreferences(
-                getString(R.string.preferences_file_name),
-                Context.MODE_PRIVATE
-            )
-        }
+        sharedPreferences = loadSharedPreferences()
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 

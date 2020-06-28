@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.CartActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryColor"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginBottom="@dimen/margin_default"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <TextView
+            android:id="@+id/txtRestaurantName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="@dimen/margin_small"
+            android:layout_toStartOf="@id/btnClearCart"
+            android:padding="@dimen/padding_small"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_default"
+            android:textStyle="bold"
+            tools:text="Ordering from: Some Restaurant" />
+
+        <Button
+            android:id="@+id/btnClearCart"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/txtRestaurantName"
+            android:layout_alignBottom="@id/txtRestaurantName"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:drawableStart="@drawable/ic_remove_from_cart"
+            android:text="@string/clear_cart"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_default" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/txtRestaurantName"
+            android:background="@android:color/darker_gray" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_above="@id/txtTotalCost"
+            android:layout_below="@id/divider"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/padding_small"
+            tools:listitem="@layout/order_items" />
+
+        <TextView
+            android:id="@+id/txtTotalCost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:layout_toStartOf="@id/btnPlaceOrder"
+            android:drawableStart="@drawable/ic_rupee_indian"
+            android:drawablePadding="@dimen/padding_default"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_default"
+            tools:text="Total:\n600" />
+
+        <Button
+            android:id="@+id/btnPlaceOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            android:text="@string/place_order_btn"
+            android:textAllCaps="false"
+            android:textSize="@dimen/text_size_default" />
+
+        <RelativeLayout
+            android:id="@+id/progressLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:elevation="@dimen/elevation_default"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/emptyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:elevation="@dimen/elevation_default"
+            android:visibility="visible">
+
+            <ImageView
+                android:layout_width="@dimen/logo_width"
+                android:layout_height="@dimen/logo_height"
+                android:layout_above="@id/txtEmptyText"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rounded_corner_background"
+                android:contentDescription="@string/no_favourites"
+                android:src="@drawable/ic_cart" />
+
+            <TextView
+                android:id="@+id/txtEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/margin_small"
+                android:padding="@dimen/padding_default"
+                android:text="@string/empty_cart_string"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_default" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -71,16 +71,16 @@ class CartDBAsyncTasks(
         Room.databaseBuilder(context, RestaurantDatabase::class.java, "restaurants-db").build()
 
     override fun doInBackground(vararg params: Void?): Boolean {
-        when (mode) {
+        return when (mode) {
             CartDBTasks.INSERT -> {
                 db.cartElementDao().insertIntoCart(cartElementEntity)
                 db.close()
-                return true
+                true
             }
             CartDBTasks.DELETE -> {
                 db.cartElementDao().deleteFromCart(cartElementEntity)
                 db.close()
-                return true
+                true
             }
         }
     }
@@ -129,7 +129,7 @@ class ClearCartAsyncTask(
     }
 }
 
-// Using this Listener so that we can hide the progress layout when the task has completed execution.
+// Using this Listener to mimic the functionality of onPostExecute() when the task has completed execution.
 interface AsyncTaskCompleteListener {
     fun onTaskComplete()
 }

@@ -9,208 +9,168 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.Request
+import com.android.volley.VolleyError
+import dev.debaleen.foodrunner.NetworkTask
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.activity.RestaurantDetailActivity
 import dev.debaleen.foodrunner.adapter.RestaurantAdapter
 import dev.debaleen.foodrunner.database.FavouriteDBAsyncTask
+import dev.debaleen.foodrunner.database.RestaurantEntity
 import dev.debaleen.foodrunner.model.RestaurantUIModel
+import dev.debaleen.foodrunner.model.toRestaurantEntity
 import dev.debaleen.foodrunner.util.*
-import org.json.JSONException
+import org.json.JSONObject
 
 class HomeFragment : Fragment() {
 
-    lateinit var progressLayout: RelativeLayout
-    lateinit var recyclerHome: RecyclerView
-    lateinit var layoutManager: RecyclerView.LayoutManager
-    lateinit var recyclerAdapter: RestaurantAdapter
+    private lateinit var progressLayout: RelativeLayout
+    private lateinit var recyclerHome: RecyclerView
+    private lateinit var layoutManager: RecyclerView.LayoutManager
+    private lateinit var recyclerAdapter: RestaurantAdapter
 
-    val restaurantList = arrayListOf<RestaurantUIModel>()
+    private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
+
+    private val restaurantList = arrayListOf<RestaurantUIModel>()
 
     private lateinit var sharedPreferences: SharedPreferences
     private var userId: String? = ""
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        sharedPreferences = loadSharedPreferences()
+
         // Inflate the layout for this fragment
-        if (activity != null) {
-            sharedPreferences = activity!!.getSharedPreferences(
-                getString(R.string.preferences_file_name),
-                Context.MODE_PRIVATE
-            )
-        }
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         progressLayout = view.findViewById(R.id.progressLayout)
         progressLayout.visibility = View.VISIBLE
         recyclerHome = view.findViewById(R.id.recyclerHome)
-        layoutManager = LinearLayoutManager(activity)
 
         userId = sharedPreferences.getString(userIdKey, "")
-        if(userId == null) {
+        if (userId == null) {
             userId = ""
         }
 
-        val queue = Volley.newRequestQueue(activity as Context)
+        setupNetworkListener()
+        setupRecyclerAdapter()
 
-        if (ConnectionManager().checkConnectivity(activity as Context)) {
-            val jsonObjectRequest =
-                object : JsonObjectRequest(Method.GET, FETCH_RESTAURANTS, null,
-                    Response.Listener {
+        layoutManager = LinearLayoutManager(activity)
+        recyclerHome.adapter = recyclerAdapter
+        recyclerHome.layoutManager = layoutManager
 
-                        try {
-                            // Response from network obtained. Hiding progress layout.
-                            progressLayout.visibility = View.GONE
-                            val success = it.getJSONObject("data").getBoolean("success")
+        fetchDataFromNetwork()
+        return view
+    }
 
-                            if (success) {
-                                val data = it.getJSONObject("data").getJSONArray("data")
-                                for (i in 0 until data.length()) {
-                                    val restaurantJsonObject = data.getJSONObject(i)
-                                    val restaurantObject = RestaurantUIModel(
-                                        resId = restaurantJsonObject.getString("id"),
-                                        resName = restaurantJsonObject.getString("name"),
-                                        resRating = restaurantJsonObject.getString("rating"),
-                                        resCostForOne = restaurantJsonObject.getString("cost_for_one"),
-                                        resImageUrl = restaurantJsonObject.getString("image_url")
-                                    )
-                                    restaurantObject.isFavourite = FavouriteDBAsyncTask(
-                                        activity as Context,
-                                        restaurantObject.toRestaurantEntity(userId!!),
-                                        FavouriteRestaurantsDBTasks.CHECK_FAVOURITE
-                                    ).execute().get()
-                                    restaurantList.add(restaurantObject)
+    private fun setupRecyclerAdapter() {
+        recyclerAdapter = RestaurantAdapter(restaurantList,
+            object : RestaurantAdapter.RestaurantClickListener {
+                override fun onRestaurantClick(position: Int, resId: String) {
+                    navigateToRestaurantDetailsActivity(restaurantList[position].resName, resId)
+                }
 
-                                    recyclerAdapter =
-                                        RestaurantAdapter(
-                                            restaurantList,
-                                            object : RestaurantAdapter.RestaurantClickListener {
-                                                override fun onRestaurantClick(
-                                                    position: Int,
-                                                    resId: String
-                                                ) {
-                                                    navigateToRestaurantDetailsActivity(restaurantList[position].resName, resId)
-                                                }
-
-                                                override fun onFavouriteClick(
-                                                    position: Int,
-                                                    resId: String
-                                                ) {
-                                                    if (!FavouriteDBAsyncTask(
-                                                            activity as Context,
-                                                            restaurantList[position].toRestaurantEntity(userId!!),
-                                                            FavouriteRestaurantsDBTasks.CHECK_FAVOURITE
-                                                        ).execute().get()
-                                                    ) {
-                                                        val async = FavouriteDBAsyncTask(
-                                                            activity as Context,
-                                                            restaurantList[position].toRestaurantEntity(userId!!),
-                                                            FavouriteRestaurantsDBTasks.INSERT
-                                                        ).execute()
-                                                        val result = async.get()
-                                                        if (result) {
-                                                            restaurantList[position].isFavourite =
-                                                                true
-                                                            recyclerAdapter.notifyItemChanged(
-                                                                position
-                                                            )
-                                                            Toast.makeText(
-                                                                context,
-                                                                "${restaurantList[position].resName} added to favourites",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                        } else {
-                                                            Toast.makeText(
-                                                                context,
-                                                                "Some error occurred.",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                        }
-                                                    } else {
-                                                        val async = FavouriteDBAsyncTask(
-                                                            activity as Context,
-                                                            restaurantList[position].toRestaurantEntity(userId!!),
-                                                            FavouriteRestaurantsDBTasks.DELETE
-                                                        ).execute()
-                                                        val result = async.get()
-                                                        if (result) {
-                                                            restaurantList[position].isFavourite =
-                                                                false
-                                                            recyclerAdapter.notifyItemChanged(
-                                                                position
-                                                            )
-                                                            Toast.makeText(
-                                                                context,
-                                                                "Restaurant removed from favourites",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                        } else {
-                                                            Toast.makeText(
-                                                                context,
-                                                                "Some error occurred.",
-                                                                Toast.LENGTH_SHORT
-                                                            ).show()
-                                                        }
-                                                    }
-                                                }
-                                            })
-
-                                    recyclerHome.adapter = recyclerAdapter
-                                    recyclerHome.layoutManager = layoutManager
-                                }
-
-                            } else {
-                                // Not success
-                                if (activity != null) {
-                                    Toast.makeText(
-                                        activity as Context,
-                                        "Error occurred",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                        .show()
-                                }
-                            }
-                        } catch (e: JSONException) {
-                            if (activity != null) {
-                                Toast.makeText(
-                                    activity as Context,
-                                    "JSOn Exception occurred. ${e.localizedMessage}",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                            }
+                override fun onFavouriteClick(position: Int, resId: String) {
+                    if (!restaurantList[position].isFavourite) {
+                        val async = FavouriteDBAsyncTask(
+                            activity as Context,
+                            restaurantList[position].toRestaurantEntity(userId!!),
+                            FavouriteRestaurantsDBTasks.INSERT
+                        ).execute()
+                        val result = async.get()
+                        if (result) {
+                            restaurantList[position].isFavourite = true
+                            recyclerAdapter.notifyItemChanged(position)
+                            showToast("${restaurantList[position].resName} added to favourites")
+                        } else {
+                            showToast("Some error occurred.")
                         }
-
-                    },
-                    Response.ErrorListener {
-                        if (activity != null) {
-                            Toast.makeText(
-                                activity as Context,
-                                "Error occurred. ${it.localizedMessage}",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
+                    } else {
+                        val async = FavouriteDBAsyncTask(
+                            activity as Context,
+                            restaurantList[position].toRestaurantEntity(userId!!),
+                            FavouriteRestaurantsDBTasks.DELETE
+                        ).execute()
+                        val result = async.get()
+                        if (result) {
+                            restaurantList[position].isFavourite = false
+                            recyclerAdapter.notifyItemChanged(position)
+                            showToast("${restaurantList[position].resName} removed from favourites")
+                        } else {
+                            showToast("Some error occurred.")
                         }
-                    }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val headers = HashMap<String, String>()
-                        headers["Content-type"] = "application/json"
-                        headers["token"] = TOKEN
-                        return headers
                     }
                 }
-            queue.add(jsonObjectRequest)
+            })
+    }
+
+    private fun setupNetworkListener() {
+        networkTaskListener = object : NetworkTask.NetworkTaskListener {
+            override fun onSuccess(result: JSONObject) {
+                try {
+                    // Response from network obtained. Hiding progress layout.
+                    progressLayout.visibility = View.GONE
+                    val returnObject = result.getJSONObject("data")
+                    val success = returnObject.getBoolean("success")
+
+                    if (success) {
+                        val data = returnObject.getJSONArray("data")
+                        for (i in 0 until data.length()) {
+                            val restaurantJsonObject = data.getJSONObject(i)
+                            val restaurantObject = RestaurantUIModel(
+                                resId = restaurantJsonObject.getString("id"),
+                                resName = restaurantJsonObject.getString("name"),
+                                resRating = restaurantJsonObject.getString("rating"),
+                                resCostForOne = restaurantJsonObject.getString("cost_for_one"),
+                                resImageUrl = restaurantJsonObject.getString("image_url")
+                            )
+                            restaurantObject.isFavourite =
+                                checkFavourite(restaurantObject.toRestaurantEntity(userId!!))
+                            restaurantList.add(restaurantObject)
+                            recyclerAdapter.updateList(restaurantList)
+                        }
+                    } else {
+                        // Not success
+                        if (activity != null) {
+                            // TODO("Show error layout")
+                            showToast("Error occurred")
+                        }
+                    }
+                } catch (e: Exception) {
+                    if (activity != null) {
+                        showToast("Exception occurred. ${e.localizedMessage}")
+                    }
+                }
+            }
+
+            override fun onFailed(error: VolleyError) {
+                if (activity != null) {
+                    showToast("Error occurred. ${error.localizedMessage}")
+                }
+            }
+        }
+    }
+
+    private fun fetchDataFromNetwork() {
+        if (ConnectionManager().checkConnectivity(activity as Context)) {
+            NetworkTask(networkTaskListener).makeNetworkRequest(
+                activity as Context,
+                Request.Method.GET, FETCH_RESTAURANTS, null
+            )
         } else {
             // No internet
             noInternetDialog(activity as Context)
         }
-        return view
+    }
+
+    private fun checkFavourite(restaurantEntity: RestaurantEntity): Boolean {
+        return FavouriteDBAsyncTask(
+            activity as Context,
+            restaurantEntity,
+            FavouriteRestaurantsDBTasks.CHECK_FAVOURITE
+        ).execute().get()
     }
 
     private fun navigateToRestaurantDetailsActivity(resName: String, resId: String) {
@@ -221,4 +181,3 @@ class HomeFragment : Fragment() {
         activity?.finish()
     }
 }
-

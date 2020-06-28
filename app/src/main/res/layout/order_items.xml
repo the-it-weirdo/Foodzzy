@@ -6,27 +6,18 @@
     android:layout_margin="@dimen/margin_small"
     android:padding="@dimen/padding_default">
 
-    <ImageView
-        android:id="@+id/imgOrderItemIcon"
+    <TextView
+        android:id="@+id/txtItemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerVertical="true"
-        android:contentDescription="@string/order_item_icon_content_description"
-        android:src="@drawable/ic_order_item"
-        android:tint="@color/black" />
-
-    <TextView
-        android:id="@+id/txtItemName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginStart="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_small"
         android:layout_toStartOf="@id/txtOrderItemPrice"
-        android:layout_toEndOf="@id/imgOrderItemIcon"
+        android:drawableStart="@drawable/ic_order_item"
+        android:drawablePadding="@dimen/padding_default"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_default"
         tools:text="Strawberry Stick" />

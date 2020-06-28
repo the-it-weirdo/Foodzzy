@@ -15,4 +15,5 @@
     <color name="cardBackground">#33FFFFFF</color>
     <color name="starColor">#FFAB00</color>
     <color name="colorFavourite">#D50000</color>
+    <color name="error">#B71C1C</color>
 </resources>

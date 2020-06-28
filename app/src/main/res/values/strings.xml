@@ -50,4 +50,11 @@
     <string name="restaurant_details_header">Choose from the menu listed below:</string>
     <string name="error_string">Some unexpected error occurred. Try again later.</string>
     <string name="go_to_cart">Go to Cart</string>
+    <string name="place_order_btn">Place Order</string>
+    <string name="ordering_from_template">Ordering from: %s</string>
+    <string name="total_cost_template">Total:\n%d</string>
+    <string name="order_placed_successfully">Order Placed successfully.</string>
+    <string name="go_to_dashboard">Go to Dashboard</string>
+    <string name="clear_cart">Clear Cart</string>
+    <string name="empty_cart_string">Your Cart is empty. Add some delicious foods here.</string>
 </resources>

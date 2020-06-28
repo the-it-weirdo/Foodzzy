@@ -14,8 +14,6 @@ interface CartElementDao {
     @Delete
     fun deleteFromCart(cartElementEntity: CartElementEntity)
 
-    /*@Query("SELECT * FROM cart_table WHERE user_id = :userId AND res_id = :resId")
-    fun isInCart(userId: String, resId: String): CartElementEntity*/
 
     @Query("SELECT * FROM cart_table WHERE user_id = :userId AND res_id = :resId")
     fun getAll(userId: String, resId: String): List<CartElementEntity>

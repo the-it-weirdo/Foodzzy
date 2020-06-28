@@ -17,7 +17,6 @@ class RestaurantDetailAdapter(
 
     fun updateDataList(list: ArrayList<RestaurantFoodItem>) {
         foodItemList = list
-        println(foodItemList)
         notifyDataSetChanged()
     }
 
@@ -46,7 +45,7 @@ class RestaurantDetailAdapter(
         fun bind(restaurantFoodItem: RestaurantFoodItem, clickListener: CartButtonListener) {
             txtSerial.text = (adapterPosition + 1).toString()
             txtFoodName.text = restaurantFoodItem.name
-            txtCostForOne.text = restaurantFoodItem.costForOne
+            txtCostForOne.text = restaurantFoodItem.cost
 
             btnAddToCart.setOnClickListener {
                 if (adapterPosition != -1) {

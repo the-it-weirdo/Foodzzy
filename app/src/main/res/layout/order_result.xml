@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.7"
+        android:background="@drawable/background"
+        android:scaleX="2"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/imgResult"
+        android:layout_width="@dimen/logo_width"
+        android:layout_height="@dimen/logo_height"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/margin_default"
+        android:layout_above="@id/txtResult"
+        android:contentDescription="@string/order_placed_successfully"
+        android:elevation="@dimen/elevation_default"
+        android:src="@drawable/ic_failed" />
+
+    <TextView
+        android:id="@+id/txtResult"
+        android:layout_margin="@dimen/margin_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Order Successful"
+        android:textSize="@dimen/text_size_default"
+        android:textColor="@color/black"
+        android:elevation="@dimen/elevation_default"
+        android:layout_centerInParent="true"/>
+
+    <Button
+        android:id="@+id/btnGoToDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/margin_default"
+        android:elevation="@dimen/elevation_default"
+        android:text="@string/go_to_dashboard"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_default" />
+
+</RelativeLayout>

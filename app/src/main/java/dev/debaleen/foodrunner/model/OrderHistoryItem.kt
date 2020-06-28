@@ -5,5 +5,5 @@ data class OrderHistoryItem(
     val restaurantName: String,
     val totalCost: String,
     val orderPlacedAt: String,
-    val orderFoodItems: List<OrderFoodItem>
+    val orderFoodItems: List<RestaurantFoodItem>
 )

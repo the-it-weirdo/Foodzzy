@@ -17,7 +17,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_default"
         android:textStyle="bold"
-        tools:text="Askin' Poppins" />
+        tools:text="Some Poppins" />
 
     <TextView
         android:id="@+id/txtDate"
@@ -30,22 +30,22 @@
         android:textSize="@dimen/text_size_small"
         tools:text="12/06/2020" />
 
-    <LinearLayout
-        android:id="@+id/llOrderItemsContainer"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/orderItemsRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRestaurantName"
         android:layout_marginTop="@dimen/margin_default"
-        android:orientation="vertical" />
+        tools:listitem="@layout/order_items" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llOrderItemsContainer"
+        android:layout_below="@id/orderItemsRecycler"
+        android:layout_alignBottom="@id/txtTotalCost"
         android:layout_marginTop="@dimen/margin_default"
         android:layout_toStartOf="@id/txtTotalCost"
         android:padding="@dimen/padding_default"
-        android:layout_alignBottom="@id/txtTotalCost"
         android:text="@string/total"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_default" />
@@ -54,14 +54,14 @@
         android:id="@+id/txtTotalCost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/llOrderItemsContainer"
+        android:layout_below="@id/orderItemsRecycler"
         android:layout_alignParentEnd="true"
-        android:textSize="@dimen/text_size_default"
         android:layout_marginTop="@dimen/margin_default"
         android:drawableStart="@drawable/ic_rupee_indian"
         android:drawablePadding="@dimen/padding_small"
         android:padding="@dimen/padding_default"
         android:textColor="@color/black"
+        android:textSize="@dimen/text_size_default"
         tools:text="410" />
 
 

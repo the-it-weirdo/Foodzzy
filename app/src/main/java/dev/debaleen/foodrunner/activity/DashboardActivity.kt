@@ -141,13 +141,13 @@ class DashboardActivity : AppCompatActivity() {
         dialog.setTitle("Confirmation")
         dialog.setMessage("Are you sure you want to log out?")
 
-        dialog.setPositiveButton("YES") { text, listener ->
+        dialog.setPositiveButton("YES") { _, _ ->
             sharedPreferences.edit().clear().apply()
             val intent = Intent(this@DashboardActivity, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
-        dialog.setNegativeButton("NO") { text, listener ->
+        dialog.setNegativeButton("NO") { _, _ ->
             navigateFromDashboardActivity(FragmentDestinations.HOME)
         }
         dialog.create()
