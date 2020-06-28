@@ -1,6 +1,5 @@
 package dev.debaleen.foodrunner.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +8,7 @@ import android.os.Handler
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.util.fromKey
 import dev.debaleen.foodrunner.util.isLoggedInKey
+import dev.debaleen.foodrunner.util.loadSharedPreferences
 import dev.debaleen.foodrunner.util.splashActivity
 
 class SplashActivity : AppCompatActivity() {
@@ -17,8 +17,8 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences =
-            getSharedPreferences(getString(R.string.preferences_file_name), Context.MODE_PRIVATE)
+        sharedPreferences = loadSharedPreferences()
+
         setContentView(R.layout.activity_splash)
         val isLoggedIn = sharedPreferences.getBoolean(isLoggedInKey, false)
 

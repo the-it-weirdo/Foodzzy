@@ -1,6 +1,5 @@
 package dev.debaleen.foodrunner.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +7,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.Request
+import com.android.volley.VolleyError
 import dev.debaleen.foodrunner.*
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
@@ -28,12 +25,12 @@ class RegistrationActivity : AppCompatActivity() {
     private lateinit var etConfirmPassword: EditText
     private lateinit var btnRegister: Button
 
+    private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedPreferences =
-            getSharedPreferences(getString(R.string.preferences_file_name), Context.MODE_PRIVATE)
+        sharedPreferences = loadSharedPreferences()
 
         setContentView(R.layout.activity_registration)
         title = "Register Yourself"
@@ -100,12 +97,8 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun checkValidInputs(
-        name: String,
-        email: String,
-        mobile: String,
-        address: String,
-        password: String,
-        confirmPassword: String
+        name: String, email: String, mobile: String,
+        address: String, password: String, confirmPassword: String
     ): InputState {
         return when {
             name.trim().length < 3 -> {
@@ -133,14 +126,10 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun sendNetworkRequest(
-        name: String,
-        mobileNumber: String,
-        password: String,
-        address: String,
-        email: String
+        name: String, mobileNumber: String, password: String, address: String, email: String
     ) {
         if (ConnectionManager().checkConnectivity(this@RegistrationActivity)) {
-            val queue = Volley.newRequestQueue(this@RegistrationActivity)
+            setupNetworkTaskListener()
 
             val jsonParams = JSONObject()
             jsonParams.put("name", name)
@@ -149,10 +138,20 @@ class RegistrationActivity : AppCompatActivity() {
             jsonParams.put("address", address)
             jsonParams.put("email", email)
 
-            val jsonRequest =
-                object : JsonObjectRequest(Method.POST, REGISTER, jsonParams, Response.Listener {
+            NetworkTask(networkTaskListener).makeNetworkRequest(
+                this@RegistrationActivity, Request.Method.POST, REGISTER, jsonParams
+            )
+        } else {
+            noInternetDialog(this@RegistrationActivity)
+        }
+    }
+
+    private fun setupNetworkTaskListener() {
+        networkTaskListener =
+            object : NetworkTask.NetworkTaskListener {
+                override fun onSuccess(result: JSONObject) {
                     try {
-                        val returnObject = it.getJSONObject("data")
+                        val returnObject = result.getJSONObject("data")
                         val success = returnObject.getBoolean("success")
 
                         if (success) {
@@ -163,37 +162,22 @@ class RegistrationActivity : AppCompatActivity() {
                             val userMobileNumber = data.getString("mobile_number")
                             val userAddress = data.getString("address")
                             saveToPreferences(
-                                userId,
-                                userName,
-                                userEmail,
-                                userMobileNumber,
-                                userAddress
+                                userId, userName, userEmail, userMobileNumber, userAddress
                             )
                             navigateToDashboardActivity()
                         } else {
                             val errorMessage = returnObject.getString("errorMessage")
-                            Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT)
-                                .show()
+                            showToast(errorMessage)
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }, Response.ErrorListener {
-                    Toast.makeText(applicationContext, it.localizedMessage, Toast.LENGTH_SHORT)
-                        .show()
-                }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val headers = HashMap<String, String>()
-                        headers["Content-type"] = "application/json"
-                        headers["token"] = TOKEN
-                        return headers
+                        showToast("Error: ${e.localizedMessage}")
                     }
                 }
-            queue.add(jsonRequest)
-        } else {
-            noInternetDialog(this@RegistrationActivity)
-        }
+
+                override fun onFailed(error: VolleyError) {
+                    showToast("Error: ${error.localizedMessage}")
+                }
+            }
     }
 
     private fun saveToPreferences(

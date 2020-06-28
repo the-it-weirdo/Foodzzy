@@ -1,6 +1,5 @@
 package dev.debaleen.foodrunner.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -38,8 +37,8 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences =
-            getSharedPreferences(getString(R.string.preferences_file_name), Context.MODE_PRIVATE)
+        sharedPreferences = loadSharedPreferences()
+
         setContentView(R.layout.activity_dashboard)
 
         drawerLayout = findViewById(R.id.drawerLayout)
@@ -113,7 +112,6 @@ class DashboardActivity : AppCompatActivity() {
                     logOutDialog()
                     drawerLayout.closeDrawers()
                 }
-
             }
             return@setNavigationItemSelectedListener true
         }
@@ -186,7 +184,6 @@ class DashboardActivity : AppCompatActivity() {
     override fun onBackPressed() {
         when (supportFragmentManager.findFragmentById(R.id.frame)) {
             !is HomeFragment -> openHomeFragment()
-
             else -> super.onBackPressed()
         }
     }

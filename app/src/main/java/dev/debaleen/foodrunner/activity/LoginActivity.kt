@@ -1,6 +1,5 @@
 package dev.debaleen.foodrunner.activity
 
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -8,10 +7,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.Request
+import com.android.volley.VolleyError
 import dev.debaleen.foodrunner.*
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
@@ -26,11 +23,13 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        sharedPreferences =
-            getSharedPreferences(getString(R.string.preferences_file_name), Context.MODE_PRIVATE)
+        sharedPreferences = loadSharedPreferences()
+
         setContentView(R.layout.activity_login)
 
         etMobileNumber = findViewById(R.id.etMobileNumber)
@@ -52,6 +51,37 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupNetworkTaskListener() {
+        networkTaskListener = object : NetworkTask.NetworkTaskListener {
+            override fun onSuccess(result: JSONObject) {
+                try {
+                    val returnObject = result.getJSONObject("data")
+                    val success = returnObject.getBoolean("success")
+
+                    if (success) {
+                        val data = returnObject.getJSONObject("data")
+                        val userId = data.getString("user_id")
+                        val userName = data.getString("name")
+                        val userEmail = data.getString("email")
+                        val userMobile = data.getString("mobile_number")
+                        val userAddress = data.getString("address")
+                        saveToPreferences(userId, userName, userEmail, userMobile, userAddress)
+                        navigateFromLoginActivity(LoginActivityDestinations.DASHBOARD)
+                    } else {
+                        val errorMessage = returnObject.getString("errorMessage")
+                        showToast(errorMessage)
+                    }
+                } catch (e: Exception) {
+                    showToast("Error: ${e.localizedMessage}")
+                }
+            }
+
+            override fun onFailed(error: VolleyError) {
+                showToast("Error: ${error.localizedMessage}")
+            }
+        }
+    }
+
     private fun tryLogin() {
         val mobileNumber = etMobileNumber.text.toString()
         val password = etPassword.text.toString()
@@ -67,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
                 etMobileNumber.error = "Wrong mobile."
             }
             else -> {
-                Toast.makeText(applicationContext, "Unknown InputState", Toast.LENGTH_SHORT).show()
+                showToast("Unknown Input State.")
             }
         }
     }
@@ -86,6 +116,22 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun sendNetworkRequest(mobileNumber: String, password: String) {
+        if (ConnectionManager().checkConnectivity(this@LoginActivity)) {
+            setupNetworkTaskListener()
+
+            val jsonParams = JSONObject()
+            jsonParams.put("mobile_number", mobileNumber)
+            jsonParams.put("password", password)
+
+            NetworkTask(networkTaskListener).makeNetworkRequest(
+                this@LoginActivity, Request.Method.POST, LOGIN, jsonParams
+            )
+        } else {
+            noInternetDialog(this@LoginActivity)
+        }
+    }
+
     private fun saveToPreferences(
         userId: String, name: String, email: String, mobile: String, address: String
     ) {
@@ -97,55 +143,6 @@ class LoginActivity : AppCompatActivity() {
             .putString(userEmailKey, email)
             .putString(userAddressKey, address)
             .apply()
-    }
-
-    private fun sendNetworkRequest(mobileNumber: String, password: String) {
-        if (ConnectionManager().checkConnectivity(this@LoginActivity)) {
-            val queue = Volley.newRequestQueue(this@LoginActivity)
-
-            val jsonParams = JSONObject()
-            jsonParams.put("mobile_number", mobileNumber)
-            jsonParams.put("password", password)
-
-            val jsonRequest =
-                object : JsonObjectRequest(Method.POST, LOGIN, jsonParams, Response.Listener {
-                    try {
-                        val returnObject = it.getJSONObject("data")
-                        val success = returnObject.getBoolean("success")
-
-                        if (success) {
-                            val data = returnObject.getJSONObject("data")
-                            val userId = data.getString("user_id")
-                            val userName = data.getString("name")
-                            val userEmail = data.getString("email")
-                            val userMobile = data.getString("mobile_number")
-                            val userAddress = data.getString("address")
-                            saveToPreferences(userId, userName, userEmail, userMobile, userAddress)
-                            navigateFromLoginActivity(LoginActivityDestinations.DASHBOARD)
-                        } else {
-                            val errorMessage = returnObject.getString("errorMessage")
-                            Toast.makeText(applicationContext, errorMessage, Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }, Response.ErrorListener {
-                    Toast.makeText(applicationContext, it.localizedMessage, Toast.LENGTH_SHORT)
-                        .show()
-                }) {
-                    override fun getHeaders(): MutableMap<String, String> {
-                        val headers = HashMap<String, String>()
-                        headers["Content-type"] = "application/json"
-                        headers["token"] = TOKEN
-                        return headers
-                    }
-                }
-            queue.add(jsonRequest)
-        } else {
-            noInternetDialog(this@LoginActivity)
-        }
     }
 
     private fun navigateFromLoginActivity(destination: LoginActivityDestinations) {

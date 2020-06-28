@@ -6,14 +6,18 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.android.volley.VolleyError
 import dev.debaleen.foodrunner.*
 import dev.debaleen.foodrunner.util.*
+import org.json.JSONObject
 
 class ForgotPasswordActivity : AppCompatActivity() {
 
     private lateinit var etMobileNumber: EditText
     private lateinit var etEmail: EditText
     private lateinit var btnNext: Button
+
+    private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +30,19 @@ class ForgotPasswordActivity : AppCompatActivity() {
         btnNext.setOnClickListener {
             tryNext()
         }
+        setupNetworkTaskListener()
+    }
 
+    private fun setupNetworkTaskListener() {
+        networkTaskListener = object: NetworkTask.NetworkTaskListener {
+            override fun onSuccess(result: JSONObject) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onFailed(error: VolleyError) {
+                TODO("Not yet implemented")
+            }
+        }
     }
 
     override fun onBackPressed() {
