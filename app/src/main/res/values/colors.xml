@@ -7,10 +7,10 @@
     <color name="secondaryLightColor">#8187ff</color>
     <color name="secondaryDarkColor">#0031ca</color>
     <color name="primaryTextColor">#212121</color>
-    <color name="secondaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">@color/white</color>
 
 
-    <color name="semi_transparent">#CCFFFFFF</color>
+    <color name="alpha_90_white">#E6FFFFFF</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="cardBackground">#33FFFFFF</color>

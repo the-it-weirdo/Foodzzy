@@ -103,10 +103,10 @@ class LoginActivity : AppCompatActivity() {
             InputState.OKAY -> {
                 sendNetworkRequest(mobileNumber, password)
             }
-            InputState.WRONG_PASSWORD -> {
+            InputState.INVALID_PASSWORD -> {
                 etPassword.error = "Invalid Password"
             }
-            InputState.WRONG_MOBILE -> {
+            InputState.INVALID_MOBILE -> {
                 etMobileNumber.error = "Invalid mobile."
             }
             else -> {
@@ -117,11 +117,11 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkValidInputs(mobileNumber: String, password: String): InputState {
         return when {
-            mobileNumber.trim().length != 10 -> {
-                InputState.WRONG_MOBILE
+            mobileNumber.length != 10 -> {
+                InputState.INVALID_MOBILE
             }
-            password.trim().length < 4 -> {
-                InputState.WRONG_PASSWORD
+            password.length < 6 -> {
+                InputState.INVALID_PASSWORD
             }
             else -> {
                 InputState.OKAY

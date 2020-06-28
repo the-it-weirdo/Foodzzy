@@ -180,7 +180,7 @@ class CartActivity : AppCompatActivity() {
         )
         dialog.setContentView(R.layout.order_result)
         val txtResult: TextView = dialog.findViewById(R.id.txtResult)
-        val imgOrderResult: ImageView = dialog.findViewById(R.id.imgResult)
+        val imgResult: ImageView = dialog.findViewById(R.id.imgResult)
         val btnGoToDashboard: Button = dialog.findViewById(R.id.btnGoToDashboard)
         txtResult.text = message
         val tintColor: Int
@@ -193,8 +193,8 @@ class CartActivity : AppCompatActivity() {
             drawableResId = R.drawable.ic_failed
             ContextCompat.getColor(this@CartActivity, R.color.error)
         }
-        imgOrderResult.setImageResource(drawableResId)
-        ImageViewCompat.setImageTintList(imgOrderResult, ColorStateList.valueOf(tintColor))
+        imgResult.setImageResource(drawableResId)
+        ImageViewCompat.setImageTintList(imgResult, ColorStateList.valueOf(tintColor))
         dialog.show()
         dialog.setCancelable(false)
 

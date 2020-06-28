@@ -76,26 +76,29 @@ class RegistrationActivity : AppCompatActivity() {
         val password = etPassword.text.toString()
         val confirmPassword = etConfirmPassword.text.toString()
         when (checkValidInputs(name, email, mobile, address, password, confirmPassword)) {
-            InputState.WRONG_NAME -> {
+            InputState.INVALID_NAME -> {
                 etName.error = "Name should contain minimum 3 characters."
             }
-            InputState.WRONG_EMAIL -> {
+            InputState.INVALID_EMAIL -> {
                 etEmail.error = "Invalid Email."
             }
-            InputState.WRONG_MOBILE -> {
+            InputState.INVALID_MOBILE -> {
                 etMobileNumber.error = "Invalid mobile number."
             }
-            InputState.WRONG_ADDRESS -> {
+            InputState.INVALID_ADDRESS -> {
                 etDeliveryAddress.error = "Field should not be empty."
             }
-            InputState.WRONG_PASSWORD -> {
-                etPassword.error = "Password should contain minimum 4 characters."
+            InputState.INVALID_PASSWORD -> {
+                etPassword.error = "Password should contain minimum 6 characters."
             }
             InputState.PSW_NO_MATCH -> {
                 etConfirmPassword.error = "Passwords do not match!"
             }
             InputState.OKAY -> {
                 sendNetworkRequest(name, mobile, password, address, email)
+            }
+            else -> {
+                showToast("Unknown Input state.")
             }
         }
 
@@ -107,19 +110,19 @@ class RegistrationActivity : AppCompatActivity() {
     ): InputState {
         return when {
             name.trim().length < 3 -> {
-                InputState.WRONG_NAME
+                InputState.INVALID_NAME
             }
             !email.matches(emailRegex) -> {
-                InputState.WRONG_EMAIL
+                InputState.INVALID_EMAIL
             }
             mobile.trim().length != 10 -> {
-                InputState.WRONG_MOBILE
+                InputState.INVALID_MOBILE
             }
             address.isEmpty() -> {
-                InputState.WRONG_ADDRESS
+                InputState.INVALID_ADDRESS
             }
-            password.length < 4 -> {
-                InputState.WRONG_PASSWORD
+            password.length < 6 -> {
+                InputState.INVALID_PASSWORD
             }
             password.compareTo(confirmPassword) != 0 -> {
                 InputState.PSW_NO_MATCH

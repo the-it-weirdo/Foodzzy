@@ -21,39 +21,46 @@
         android:layout_centerInParent="true"
         android:elevation="@dimen/elevation_large" />
 
-    <RelativeLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:gravity="center">
+        android:layout_centerInParent="true">
 
-        <TextView
-            android:id="@+id/txtAppName"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_default"
-            android:text="@string/app_name"
-            android:textAlignment="center"
-            android:textColor="@color/secondaryTextColor"
-            android:textSize="40sp"
-            android:textStyle="bold" />
+            android:gravity="center">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtAppName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="@dimen/margin_x_large"
-            android:layout_marginEnd="@dimen/margin_x_large"
-            android:layout_marginBottom="@dimen/margin_default"
-            app:cardBackgroundColor="#E6FFFFFF"
-            app:cardCornerRadius="@dimen/card_corner_radius_large"
-            app:cardElevation="10dp">
+            <TextView
+                android:id="@+id/txtAppName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/margin_default"
+                android:text="@string/app_name"
+                android:textAlignment="center"
+                android:textColor="@color/secondaryTextColor"
+                android:textSize="40sp"
+                android:textStyle="bold" />
 
-            <include layout="@layout/content_login" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtAppName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/margin_x_large"
+                android:layout_marginEnd="@dimen/margin_x_large"
+                android:layout_marginBottom="@dimen/margin_default"
+                app:cardBackgroundColor="@color/alpha_90_white"
+                app:cardCornerRadius="@dimen/card_corner_radius_large"
+                app:cardElevation="10dp">
 
-        </androidx.cardview.widget.CardView>
+                <include layout="@layout/content_login" />
 
-    </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

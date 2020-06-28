@@ -17,13 +17,8 @@ const val userMobileKey = "userMobile"
 const val userEmailKey = "userEmail"
 const val userNameKey = "userName"
 const val userAddressKey = "userAddress"
-
 const val restaurantIdKey = "res_id"
 const val restaurantNameKey = "res_name"
-
-const val fromKey = "fromActivity"
-const val forgotPasswordActivity = "ForgotPasswordActivity"
-const val splashActivity = "SplashActivity"
 
 const val emailRegexString =  "^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:" +
         "[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$"

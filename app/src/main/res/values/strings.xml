@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">FoodRunner</string>
+    <string name="app_name">Foodzzy</string>
+
     <string name="preferences_file_name">food_runner_preferences</string>
     <string name="content_app_logo">App Logo</string>
     <string name="mobile_number_hint">Mobile Number(10 digits)</string>
@@ -26,9 +27,6 @@
     <string name="log_out_menu_title">Log out</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="rupee_icon_attribution">Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></string>
 
@@ -57,5 +55,12 @@
     <string name="go_to_dashboard">Go to Dashboard</string>
     <string name="clear_cart">Clear Cart</string>
     <string name="empty_cart_string">Your Cart is empty. Add some delicious foods here.</string>
-    <string name="unexpected__error">Some unexpected error occurred. Retry later.</string>
+    <string name="unexpected_error">Some unexpected error occurred. Retry later.</string>
+    <string name="login_header_text">Login</string>
+    <string name="register_header_text">Register</string>
+    <string name="reset_password_header">Reset Password</string>
+    <string name="sort_action_title">Sort</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="reset_password_instruction">Enter OTP received in mail and create a new password</string>
 </resources>

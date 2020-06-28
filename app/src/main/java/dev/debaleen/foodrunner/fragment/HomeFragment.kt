@@ -4,15 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.VolleyError
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.activity.RestaurantDetailActivity
@@ -23,6 +22,8 @@ import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.model.toRestaurantEntity
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
+import java.util.*
+import kotlin.Comparator
 
 class HomeFragment : Fragment() {
 
@@ -39,6 +40,24 @@ class HomeFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private var userId: String? = ""
 
+    private val ratingComparator = Comparator<RestaurantUIModel> { restaurant1, restaurant2 ->
+        if (restaurant1.resRating.compareTo(restaurant2.resRating, true) == 0) {
+            restaurant1.resCostForOne.compareTo(restaurant2.resCostForOne, true)
+        } else {
+            restaurant1.resRating.compareTo(restaurant2.resRating, true)
+        }
+    }
+
+    private val priceComparator = Comparator<RestaurantUIModel> { restaurant1, restaurant2 ->
+        if (restaurant1.resCostForOne.compareTo(restaurant2.resCostForOne, true) == 0) {
+            restaurant1.resRating.compareTo(restaurant2.resRating, true)
+        } else {
+            restaurant1.resCostForOne.compareTo(restaurant2.resCostForOne, true)
+        }
+    }
+
+    private var checkedItem: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -46,6 +65,8 @@ class HomeFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        setHasOptionsMenu(true)
+
         progressLayout = view.findViewById(R.id.progressLayout)
         progressLayout.show()
         recyclerHome = view.findViewById(R.id.recyclerHome)
@@ -172,6 +193,78 @@ class HomeFragment : Fragment() {
             restaurantEntity,
             FavouriteRestaurantsDBTasks.CHECK_FAVOURITE
         ).execute().get()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_home_fragment, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.action_sort) {
+            showSortDialog()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun sortRestaurant(sortOn: RestaurantSortOn) {
+        when (sortOn) {
+            RestaurantSortOn.RATING -> {
+                Collections.sort(restaurantList, ratingComparator)
+                restaurantList.reverse()
+            }
+            RestaurantSortOn.PRICE_HIGH_TO_LOW -> {
+                Collections.sort(restaurantList, priceComparator)
+                restaurantList.reverse()
+            }
+            RestaurantSortOn.PRICE_LOW_TO_HIGH -> {
+                Collections.sort(restaurantList, priceComparator)
+            }
+            RestaurantSortOn.NONE -> {
+                // Do nothing
+            }
+        }
+        recyclerAdapter.updateList(restaurantList)
+    }
+
+    private fun showSortDialog() {
+        val singleItems = arrayOf("Rating", "Cost(High to Low)", "Cost(Low to High")
+        var sortOn: RestaurantSortOn = when (checkedItem) {
+            0 -> {
+                RestaurantSortOn.RATING
+            }
+            1 -> {
+                RestaurantSortOn.PRICE_HIGH_TO_LOW
+            }
+            else -> {
+                RestaurantSortOn.PRICE_LOW_TO_HIGH
+            }
+        }
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle("Sort By?")
+            .setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setPositiveButton("Okay") { _, _ ->
+                sortRestaurant(sortOn)
+            }
+            .setSingleChoiceItems(singleItems, checkedItem) { _, which ->
+                sortOn = when (which) {
+                    0 -> {
+                        checkedItem = 0
+                        RestaurantSortOn.RATING
+                    }
+                    1 -> {
+                        checkedItem = 1
+                        RestaurantSortOn.PRICE_HIGH_TO_LOW
+                    }
+                    else -> {
+                        checkedItem = 2
+                        RestaurantSortOn.PRICE_LOW_TO_HIGH
+                    }
+                }
+            }.show()
     }
 
     private fun navigateToRestaurantDetailsActivity(resName: String, resId: String) {

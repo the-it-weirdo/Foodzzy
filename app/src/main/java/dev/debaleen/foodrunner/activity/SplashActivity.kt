@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import dev.debaleen.foodrunner.R
-import dev.debaleen.foodrunner.util.fromKey
 import dev.debaleen.foodrunner.util.isLoggedInKey
 import dev.debaleen.foodrunner.util.loadSharedPreferences
-import dev.debaleen.foodrunner.util.splashActivity
 
 class SplashActivity : AppCompatActivity() {
 
@@ -28,17 +26,11 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun navigateFromSplash(isLoggedIn: Boolean) {
-        val intentFromSplash: Intent
-        if (isLoggedIn) {
-            intentFromSplash = Intent(this@SplashActivity, DashboardActivity::class.java)
-            intentFromSplash.putExtra(
-                fromKey,
-                splashActivity
-            )
+        val intentFromSplash: Intent = if (isLoggedIn) {
+            Intent(this@SplashActivity, DashboardActivity::class.java)
         } else {
-            intentFromSplash = Intent(this@SplashActivity, LoginActivity::class.java)
+            Intent(this@SplashActivity, LoginActivity::class.java)
         }
-
         startActivity(intentFromSplash)
         finish()
     }

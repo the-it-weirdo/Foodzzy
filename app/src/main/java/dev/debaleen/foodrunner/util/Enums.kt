@@ -1,7 +1,7 @@
 package dev.debaleen.foodrunner.util
 
 enum class InputState {
-    WRONG_MOBILE, WRONG_PASSWORD, OKAY, WRONG_EMAIL, WRONG_NAME, WRONG_ADDRESS, PSW_NO_MATCH
+    INVALID_MOBILE, INVALID_PASSWORD, OKAY, INVALID_EMAIL, INVALID_NAME, INVALID_ADDRESS, PSW_NO_MATCH, INVALID_OTP
 }
 
 enum class FragmentDestinations {
@@ -18,4 +18,8 @@ enum class CartDBTasks {
 
 enum class LoginActivityDestinations {
     DASHBOARD, FORGOT_PASSWORD, REGISTRATION
+}
+
+enum class RestaurantSortOn {
+    NONE, RATING, PRICE_HIGH_TO_LOW, PRICE_LOW_TO_HIGH
 }
