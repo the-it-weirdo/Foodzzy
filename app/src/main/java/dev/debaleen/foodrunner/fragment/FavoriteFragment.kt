@@ -15,6 +15,8 @@ import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.activity.RestaurantDetailActivity
 import dev.debaleen.foodrunner.adapter.RestaurantAdapter
 import dev.debaleen.foodrunner.database.*
+import dev.debaleen.foodrunner.database.entity.RestaurantEntity
+import dev.debaleen.foodrunner.database.entity.toListRestaurantUIModel
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.model.toRestaurantEntity
 import dev.debaleen.foodrunner.util.*
@@ -44,9 +46,9 @@ class FavoriteFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_favorite, container, false)
         progressLayout = view.findViewById(R.id.progressLayout)
-        progressLayout.visibility = View.VISIBLE
+        progressLayout.show()
         emptyLayout = view.findViewById(R.id.emptyLayout)
-        emptyLayout.visibility = View.GONE
+        emptyLayout.hide()
         recyclerFavourite = view.findViewById(R.id.recyclerFavourite)
         recyclerFavourite.setHasFixedSize(true)
 
@@ -83,7 +85,7 @@ class FavoriteFragment : Fragment() {
             activity as Context,
             object : AsyncTaskCompleteListener {
                 override fun onTaskComplete() {
-                    progressLayout.visibility = View.GONE
+                    progressLayout.hide()
                 }
             }, userId!!
         ).execute().get()
@@ -95,7 +97,7 @@ class FavoriteFragment : Fragment() {
             }
             recyclerAdapter.updateList(restaurantList)
         } else {
-            emptyLayout.visibility = View.VISIBLE
+            emptyLayout.show()
         }
     }
 
@@ -111,7 +113,7 @@ class FavoriteFragment : Fragment() {
             showToast("Something went wrong.")
         }
         if (restaurantList.isEmpty()) {
-            emptyLayout.visibility = View.VISIBLE
+            emptyLayout.show()
         }
     }
 

@@ -3,7 +3,6 @@ package dev.debaleen.foodrunner.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,21 +54,9 @@ class OrderHistoryAdapter(private var orderHistoryList: ArrayList<OrderHistoryIt
                 txtDate.text = dateStr
             }
             txtTotalCost.text = orderHistoryItem.totalCost
-            val o = orderHistoryItem.orderFoodItems
 
             container.layoutManager = LinearLayoutManager(container.context)
             container.adapter = CartAdapter(ArrayList(orderHistoryItem.orderFoodItems))
-
-            /*for (item in orderHistoryItem.orderFoodItems) {
-                val foodItemView = LayoutInflater.from(view.context)
-                    .inflate(R.layout.order_items, container, false)
-                val txtItemName: TextView = foodItemView.findViewById(R.id.txtItemName)
-                val txtOrderItemPrice: TextView = foodItemView.findViewById(R.id.txtOrderItemPrice)
-                txtItemName.text = item.name
-                txtOrderItemPrice.text = item.costForOne
-
-                container.addView(foodItemView)
-            }*/
         }
     }
 }

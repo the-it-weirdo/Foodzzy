@@ -3,6 +3,8 @@ package dev.debaleen.foodrunner.database
 import android.content.Context
 import android.os.AsyncTask
 import androidx.room.Room
+import dev.debaleen.foodrunner.database.entity.CartElementEntity
+import dev.debaleen.foodrunner.database.entity.RestaurantEntity
 import dev.debaleen.foodrunner.util.CartDBTasks
 import dev.debaleen.foodrunner.util.FavouriteRestaurantsDBTasks
 

@@ -13,12 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.VolleyError
-import dev.debaleen.foodrunner.NetworkTask
+import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.activity.RestaurantDetailActivity
 import dev.debaleen.foodrunner.adapter.RestaurantAdapter
 import dev.debaleen.foodrunner.database.FavouriteDBAsyncTask
-import dev.debaleen.foodrunner.database.RestaurantEntity
+import dev.debaleen.foodrunner.database.entity.RestaurantEntity
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.model.toRestaurantEntity
 import dev.debaleen.foodrunner.util.*
@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var progressLayout: RelativeLayout
     private lateinit var recyclerHome: RecyclerView
+    private lateinit var emptyView: RelativeLayout
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var recyclerAdapter: RestaurantAdapter
 
@@ -46,8 +47,10 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         progressLayout = view.findViewById(R.id.progressLayout)
-        progressLayout.visibility = View.VISIBLE
+        progressLayout.show()
         recyclerHome = view.findViewById(R.id.recyclerHome)
+        emptyView = view.findViewById(R.id.emptyLayout)
+        emptyView.hide()
 
         userId = sharedPreferences.getString(userIdKey, "")
         if (userId == null) {
@@ -111,11 +114,12 @@ class HomeFragment : Fragment() {
             override fun onSuccess(result: JSONObject) {
                 try {
                     // Response from network obtained. Hiding progress layout.
-                    progressLayout.visibility = View.GONE
+                    progressLayout.hide()
                     val returnObject = result.getJSONObject("data")
                     val success = returnObject.getBoolean("success")
 
                     if (success) {
+                        emptyView.hide()
                         val data = returnObject.getJSONArray("data")
                         for (i in 0 until data.length()) {
                             val restaurantJsonObject = data.getJSONObject(i)
@@ -133,10 +137,7 @@ class HomeFragment : Fragment() {
                         }
                     } else {
                         // Not success
-                        if (activity != null) {
-                            // TODO("Show error layout")
-                            showToast("Error occurred")
-                        }
+                        emptyView.show()
                     }
                 } catch (e: Exception) {
                     if (activity != null) {

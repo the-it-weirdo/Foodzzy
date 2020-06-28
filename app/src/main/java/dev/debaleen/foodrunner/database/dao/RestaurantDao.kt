@@ -1,9 +1,10 @@
-package dev.debaleen.foodrunner.database
+package dev.debaleen.foodrunner.database.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import dev.debaleen.foodrunner.database.entity.RestaurantEntity
 
 @Dao
 interface RestaurantDao {

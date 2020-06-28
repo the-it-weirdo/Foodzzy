@@ -11,14 +11,15 @@ import android.widget.RelativeLayout
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.Request
+import com.android.volley.VolleyError
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.adapter.OrderHistoryAdapter
 import dev.debaleen.foodrunner.model.OrderHistoryItem
 import dev.debaleen.foodrunner.model.toRestaurantFoodItemList
+import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.util.*
+import org.json.JSONObject
 
 class OrderHistoryFragment : Fragment() {
 
@@ -33,17 +34,15 @@ class OrderHistoryFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private var userId: String? = ""
 
+    private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        sharedPreferences = loadSharedPreferences()
+
         // Inflate the layout for this fragment
-        if (activity != null) {
-            sharedPreferences = activity!!.getSharedPreferences(
-                getString(R.string.preferences_file_name),
-                Context.MODE_PRIVATE
-            )
-        }
         val view = inflater.inflate(R.layout.fragment_order_history, container, false)
 
         userId = sharedPreferences.getString(userIdKey, "")
@@ -51,16 +50,16 @@ class OrderHistoryFragment : Fragment() {
         recyclerOrderHistory = view.findViewById(R.id.recyclerOrderHistory)
         recyclerOrderHistory.setHasFixedSize(true)
         progressLayout = view.findViewById(R.id.progressLayout)
-        progressLayout.visibility = View.VISIBLE
+        progressLayout.show()
         emptyLayout = view.findViewById(R.id.emptyLayout)
-        emptyLayout.visibility = View.GONE
+        emptyLayout.hide()
 
-        populateRecycler()
+        setupRecycler()
         fetchDataFromNetwork()
         return view
     }
 
-    private fun populateRecycler() {
+    private fun setupRecycler() {
         recyclerAdapter = OrderHistoryAdapter(orderHistoryList)
         layoutManager = LinearLayoutManager(activity as Context)
         recyclerOrderHistory.adapter = recyclerAdapter
@@ -76,59 +75,57 @@ class OrderHistoryFragment : Fragment() {
 
     private fun fetchDataFromNetwork() {
         if (ConnectionManager().checkConnectivity(activity as Context)) {
-            makeNetworkRequest()
+            setupNetworkTaskListener()
+            NetworkTask(networkTaskListener).makeNetworkRequest(
+                activity as Context, Request.Method.GET, "$FETCH_PREVIOUS_ORDERS$userId", null
+            )
         } else {
             noInternetDialog(activity as Context)
         }
     }
 
-    private fun makeNetworkRequest() {
-        val queue = Volley.newRequestQueue(activity as Context)
-        val jsonObjectRequest = object : JsonObjectRequest(
-            Method.GET,
-            "$FETCH_PREVIOUS_ORDERS$userId",
-            null,
-            Response.Listener {
-                try {
-                    progressLayout.visibility = View.GONE
-                    val returnObject = it.getJSONObject("data")
-                    val success = returnObject.getBoolean("success")
-                    if (success) {
-                        val data = returnObject.getJSONArray("data")
-                        if (data.length() == 0) {
-                            emptyLayout.visibility = View.VISIBLE
-                        } else {
-                            for (i in 0 until data.length()) {
-                                val orderHistoryJsonObject = data.getJSONObject(i)
-                                val orderHistoryItem = OrderHistoryItem(
-                                    orderId = orderHistoryJsonObject.getString("order_id"),
-                                    restaurantName = orderHistoryJsonObject.getString("restaurant_name"),
-                                    totalCost = orderHistoryJsonObject.getString("total_cost"),
-                                    orderPlacedAt = orderHistoryJsonObject.getString("order_placed_at"),
-                                    orderFoodItems = orderHistoryJsonObject.getJSONArray("food_items")
-                                        .toRestaurantFoodItemList("food_item_id", "name", "cost")
-                                )
-                                orderHistoryList.add(orderHistoryItem)
+    private fun setupNetworkTaskListener() {
+        networkTaskListener =
+            object : NetworkTask.NetworkTaskListener {
+                override fun onSuccess(result: JSONObject) {
+                    try {
+                        progressLayout.hide()
+                        val returnObject = result.getJSONObject("data")
+                        val success = returnObject.getBoolean("success")
+                        if (success) {
+                            val data = returnObject.getJSONArray("data")
+                            if (data.length() == 0) {
+                                emptyLayout.show()
+                            } else {
+                                for (i in 0 until data.length()) {
+                                    val orderHistoryJsonObject = data.getJSONObject(i)
+                                    val orderHistoryItem = OrderHistoryItem(
+                                        orderId = orderHistoryJsonObject.getString("order_id"),
+                                        restaurantName = orderHistoryJsonObject.getString("restaurant_name"),
+                                        totalCost = orderHistoryJsonObject.getString("total_cost"),
+                                        orderPlacedAt = orderHistoryJsonObject.getString("order_placed_at"),
+                                        orderFoodItems = orderHistoryJsonObject.getJSONArray("food_items")
+                                            .toRestaurantFoodItemList(
+                                                "food_item_id",
+                                                "name",
+                                                "cost"
+                                            )
+                                    )
+                                    orderHistoryList.add(orderHistoryItem)
+                                }
+                                recyclerAdapter.updateList(orderHistoryList)
                             }
-                            recyclerAdapter.updateList(orderHistoryList)
+                        } else {
+                            showToast("Some unexpected error occurred.")
                         }
-                    } else {
-                        showToast("Some unexpected error occurred.")
+                    } catch (e: Exception) {
+                        showToast("Exception occurred. ${e.localizedMessage}")
                     }
-                } catch (e: Exception) {
-                    showToast("Exception occurred. ${e.localizedMessage}")
                 }
-            },
-            Response.ErrorListener {
-                showToast("Error occurred. ${it.localizedMessage}")
-            }) {
-            override fun getHeaders(): MutableMap<String, String> {
-                val headers = HashMap<String, String>()
-                headers["Content-type"] = "application/json"
-                headers["token"] = TOKEN
-                return headers
+
+                override fun onFailed(error: VolleyError) {
+                    showToast("Error occurred. ${error.localizedMessage}")
+                }
             }
-        }
-        queue.add(jsonObjectRequest)
     }
 }

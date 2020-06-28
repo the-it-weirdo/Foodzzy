@@ -7,7 +7,6 @@ import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -17,9 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.VolleyError
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
-import dev.debaleen.foodrunner.NetworkTask
+import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.adapter.CartAdapter
 import dev.debaleen.foodrunner.database.AsyncTaskCompleteListener
@@ -41,7 +39,6 @@ class CartActivity : AppCompatActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var recyclerRestaurantDetails: RecyclerView
     private lateinit var btnPlaceOrder: Button
-    private lateinit var btnClearCart: Button
     private lateinit var txtTotalCost: TextView
     private lateinit var txtOrderingFrom: TextView
     private lateinit var progressLayout: RelativeLayout
@@ -78,9 +75,8 @@ class CartActivity : AppCompatActivity() {
         txtTotalCost = findViewById(R.id.txtTotalCost)
         txtOrderingFrom = findViewById(R.id.txtRestaurantName)
         btnPlaceOrder = findViewById(R.id.btnPlaceOrder)
-        btnClearCart = findViewById(R.id.btnClearCart)
         progressLayout = findViewById(R.id.progressLayout)
-        progressLayout.visibility = View.VISIBLE
+        progressLayout.show()
         emptyLayout = findViewById(R.id.emptyLayout)
 
         txtOrderingFrom.text = getString(R.string.ordering_from_template, restaurantName)
@@ -96,10 +92,6 @@ class CartActivity : AppCompatActivity() {
             } else {
                 noInternetDialog(this@CartActivity)
             }
-        }
-
-        btnClearCart.setOnClickListener {
-            showClearCartDialog()
         }
 
         setupNetworkTaskListener()
@@ -134,37 +126,11 @@ class CartActivity : AppCompatActivity() {
             }
     }
 
-
-    private fun showClearCartDialog() {
-        val dialog = MaterialAlertDialogBuilder(this@CartActivity)
-        dialog.setTitle("Confirmation")
-        dialog.setMessage("Are you sure you want to clear the cart?")
-
-        dialog.setPositiveButton("YES") { _, _ ->
-            ClearCartAsyncTask(this@CartActivity,
-                userId, restaurantId,
-                object : AsyncTaskCompleteListener {
-                    override fun onTaskComplete() {
-                        showToast("Cart cleared.")
-                        cartList.clear()
-                        recyclerAdapter.updateList(cartList)
-                        emptyLayout.visibility = View.VISIBLE
-                    }
-                }).execute()
-        }
-        dialog.setNegativeButton("NO") { _, _ ->
-            // Do Nothing
-        }
-        dialog.setCancelable(false)
-        dialog.create()
-        dialog.show()
-    }
-
     private fun getCartFromDB() {
         val resultFromDB = RetrieveCartAsyncTask(this@CartActivity,
             userId, restaurantId, object : AsyncTaskCompleteListener {
                 override fun onTaskComplete() {
-                    progressLayout.visibility = View.GONE
+                    progressLayout.hide()
                 }
             }).execute().get()
         for (element in resultFromDB) {
@@ -175,9 +141,9 @@ class CartActivity : AppCompatActivity() {
             )
         }
         if (cartList.isEmpty()) {
-            emptyLayout.visibility = View.VISIBLE
+            emptyLayout.show()
         } else {
-            emptyLayout.visibility = View.GONE
+            emptyLayout.hide()
             for (i in 0 until cartList.size) {
                 totalCost += cartList[i].cost.toInt()
             }
@@ -187,7 +153,7 @@ class CartActivity : AppCompatActivity() {
     }
 
     private fun networkRequest() {
-        progressLayout.visibility = View.VISIBLE
+        progressLayout.show()
 
         val jsonParams = JSONObject()
         jsonParams.put("user_id", userId)

@@ -1,4 +1,4 @@
-package dev.debaleen.foodrunner.database
+package dev.debaleen.foodrunner.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

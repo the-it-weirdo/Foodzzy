@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
 import dev.debaleen.foodrunner.R
@@ -17,9 +16,10 @@ import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
-import dev.debaleen.foodrunner.NetworkTask
+import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.adapter.RestaurantDetailAdapter
 import dev.debaleen.foodrunner.database.*
+import dev.debaleen.foodrunner.database.entity.CartElementEntity
 import dev.debaleen.foodrunner.model.RestaurantFoodItem
 import dev.debaleen.foodrunner.model.toRestaurantFoodItemList
 import dev.debaleen.foodrunner.util.*
@@ -62,9 +62,9 @@ class RestaurantDetailActivity : AppCompatActivity() {
         toolbar = findViewById(R.id.toolbar)
         recyclerRestaurantDetails = findViewById(R.id.recyclerRestaurantDetails)
         btnGoToCart = findViewById(R.id.btnGoToCart)
-        btnGoToCart.visibility = View.GONE
+        btnGoToCart.hide()
         progressLayout = findViewById(R.id.progressLayout)
-        progressLayout.visibility = View.VISIBLE
+        progressLayout.show()
         emptyLayout = findViewById(R.id.emptyLayout)
 
         setupRecyclerAdapter()
@@ -74,7 +74,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
         btnGoToCart.setOnClickListener {
             // To prevent double clicks on 'Go to cart' button
-            btnGoToCart.isEnabled = false
+            btnGoToCart.disable()
             buildCart()
         }
 
@@ -87,7 +87,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
         // scrolls back to this activity from CartActivity
         // This won't affect if the activity is created for the first time as the button will not be
         // visible then.
-        btnGoToCart.isEnabled = true
+        btnGoToCart.enable()
         super.onResume()
     }
 
@@ -96,7 +96,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
             object : RestaurantDetailAdapter.CartButtonListener {
                 override fun onAddToCartButtonClick(position: Int, foodItem: RestaurantFoodItem) {
                     if (orderList.add(foodItem) && orderList.isNotEmpty()) {
-                        btnGoToCart.visibility = View.VISIBLE
+                        btnGoToCart.show()
                     }
                 }
 
@@ -104,7 +104,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
                     position: Int, foodItem: RestaurantFoodItem
                 ) {
                     if (orderList.remove(foodItem) && orderList.isEmpty()) {
-                        btnGoToCart.visibility = View.GONE
+                        btnGoToCart.hide()
                     }
                 }
             })
@@ -136,14 +136,14 @@ class RestaurantDetailActivity : AppCompatActivity() {
         networkTaskListener =
             object : NetworkTask.NetworkTaskListener {
                 override fun onSuccess(result: JSONObject) {
-                    progressLayout.visibility = View.GONE
+                    progressLayout.hide()
                     try {
                         val returnObject = result.getJSONObject("data")
                         val success = returnObject.getBoolean("success")
                         if (success) {
                             val foodsArray = returnObject.getJSONArray("data")
                             if (foodsArray.length() == 0) {
-                                emptyLayout.visibility = View.VISIBLE
+                                emptyLayout.show()
                             } else {
                                 menuList = ArrayList(
                                     foodsArray.toRestaurantFoodItemList(
@@ -196,7 +196,11 @@ class RestaurantDetailActivity : AppCompatActivity() {
 
         val result = CartDBAsyncTasks(
             this@RestaurantDetailActivity,
-            CartElementEntity(userId, restaurantId, foodItems),
+            CartElementEntity(
+                userId,
+                restaurantId,
+                foodItems
+            ),
             CartDBTasks.INSERT
         ).execute().get()
 
@@ -222,7 +226,7 @@ class RestaurantDetailActivity : AppCompatActivity() {
             navigateToDashboardActivity()
         } else {
             // If there's item in the cart, the user should be able to see the cart.
-            btnGoToCart.visibility = View.VISIBLE
+            btnGoToCart.show()
             clearCartDialog()
         }
     }

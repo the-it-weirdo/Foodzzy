@@ -57,4 +57,5 @@
     <string name="go_to_dashboard">Go to Dashboard</string>
     <string name="clear_cart">Clear Cart</string>
     <string name="empty_cart_string">Your Cart is empty. Add some delicious foods here.</string>
+    <string name="unexpected__error">Some unexpected error occurred. Retry later.</string>
 </resources>

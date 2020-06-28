@@ -1,4 +1,4 @@
-package dev.debaleen.foodrunner
+package dev.debaleen.foodrunner.network
 
 import android.content.Context
 import com.android.volley.Response

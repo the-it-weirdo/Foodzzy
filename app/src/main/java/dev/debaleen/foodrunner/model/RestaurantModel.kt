@@ -1,6 +1,6 @@
 package dev.debaleen.foodrunner.model
 
-import dev.debaleen.foodrunner.database.RestaurantEntity
+import dev.debaleen.foodrunner.database.entity.RestaurantEntity
 
 data class RestaurantUIModel (
     val resId: String,
