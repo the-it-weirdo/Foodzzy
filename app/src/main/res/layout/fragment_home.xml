@@ -28,7 +28,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/emptyLayout"
+        android:id="@+id/errorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -37,14 +37,14 @@
         <ImageView
             android:layout_width="@dimen/logo_width"
             android:layout_height="@dimen/logo_height"
-            android:layout_above="@id/txtNoFavourites"
+            android:layout_above="@id/txtError"
             android:layout_centerHorizontal="true"
             android:background="@drawable/rounded_corner_background"
-            android:contentDescription="@string/no_favourites"
+            android:contentDescription="@string/error"
             android:src="@drawable/ic_error" />
 
         <TextView
-            android:id="@+id/txtNoFavourites"
+            android:id="@+id/txtError"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"

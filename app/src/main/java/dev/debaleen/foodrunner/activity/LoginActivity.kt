@@ -7,11 +7,14 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.google.android.material.textfield.TextInputEditText
 import dev.debaleen.foodrunner.*
+import dev.debaleen.foodrunner.network.ConnectionManager
 import dev.debaleen.foodrunner.network.NetworkTask
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
 
@@ -177,6 +180,6 @@ class LoginActivity : AppCompatActivity() {
             )
         }
         startActivity(intent)
-        finish()
+        ActivityCompat.finishAffinity(this@LoginActivity)
     }
 }

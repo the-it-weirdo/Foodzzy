@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/txtRestaurantName"
         android:layout_marginTop="@dimen/margin_default"
-        tools:listitem="@layout/order_items" />
+        tools:listitem="@layout/food_item" />
 
     <TextView
         android:layout_width="wrap_content"

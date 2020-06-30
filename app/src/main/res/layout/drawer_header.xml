@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/primaryColor"
     android:orientation="vertical">
 
@@ -14,8 +14,9 @@
         android:layout_marginStart="@dimen/margin_large"
         android:layout_marginTop="@dimen/margin_x_large"
         android:layout_marginEnd="@dimen/margin_large"
+        android:contentDescription="@string/profile_pic_content_description"
         android:padding="@dimen/padding_default"
-        app:srcCompat="@drawable/ic_profile_pic_demo" />
+        app:srcCompat="@drawable/ic_person" />
 
     <TextView
         android:id="@+id/txtUserName"

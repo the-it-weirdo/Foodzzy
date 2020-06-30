@@ -28,8 +28,6 @@
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
 
-    <string name="rupee_icon_attribution">Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></string>
-
     <string name="restaurant_image_content_desc">Restaurant Image</string>
     <string name="favourite_button_content_desc">Add to favourites</string>
     <string name="no_favourite_restaurants">You have no favourite restaurants. Add some favourite restaurants to view here.</string>
@@ -63,4 +61,7 @@
     <string name="reset_password">Reset Password</string>
     <string name="enter_otp">Enter OTP</string>
     <string name="reset_password_instruction">Enter OTP received in mail and create a new password</string>
+    <string name="error">Error</string>
+    <string name="profile_pic_content_description">Profile Picture</string>
+
 </resources>

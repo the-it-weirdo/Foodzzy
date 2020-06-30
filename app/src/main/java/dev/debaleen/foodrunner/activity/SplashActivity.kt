@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.core.app.ActivityCompat
 import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.util.isLoggedInKey
 import dev.debaleen.foodrunner.util.loadSharedPreferences
@@ -32,6 +33,6 @@ class SplashActivity : AppCompatActivity() {
             Intent(this@SplashActivity, LoginActivity::class.java)
         }
         startActivity(intentFromSplash)
-        finish()
+        ActivityCompat.finishAffinity(this@SplashActivity)
     }
 }

@@ -20,6 +20,8 @@ import dev.debaleen.foodrunner.database.FavouriteDBAsyncTask
 import dev.debaleen.foodrunner.database.entity.RestaurantEntity
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 import dev.debaleen.foodrunner.model.toRestaurantEntity
+import dev.debaleen.foodrunner.network.ConnectionManager
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
 import java.util.*
@@ -29,7 +31,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var progressLayout: RelativeLayout
     private lateinit var recyclerHome: RecyclerView
-    private lateinit var emptyView: RelativeLayout
+    private lateinit var errorLayout: RelativeLayout
     private lateinit var layoutManager: RecyclerView.LayoutManager
     private lateinit var recyclerAdapter: RestaurantAdapter
 
@@ -70,8 +72,8 @@ class HomeFragment : Fragment() {
         progressLayout = view.findViewById(R.id.progressLayout)
         progressLayout.show()
         recyclerHome = view.findViewById(R.id.recyclerHome)
-        emptyView = view.findViewById(R.id.emptyLayout)
-        emptyView.hide()
+        errorLayout = view.findViewById(R.id.errorLayout)
+        errorLayout.hide()
 
         userId = sharedPreferences.getString(userIdKey, "")
         if (userId == null) {
@@ -140,7 +142,7 @@ class HomeFragment : Fragment() {
                     val success = returnObject.getBoolean("success")
 
                     if (success) {
-                        emptyView.hide()
+                        errorLayout.hide()
                         val data = returnObject.getJSONArray("data")
                         for (i in 0 until data.length()) {
                             val restaurantJsonObject = data.getJSONObject(i)
@@ -158,9 +160,10 @@ class HomeFragment : Fragment() {
                         }
                     } else {
                         // Not success
-                        emptyView.show()
+                        errorLayout.show()
                     }
                 } catch (e: Exception) {
+                    errorLayout.show()
                     if (activity != null) {
                         showToast("Exception occurred. ${e.localizedMessage}")
                     }
@@ -168,8 +171,9 @@ class HomeFragment : Fragment() {
             }
 
             override fun onFailed(error: VolleyError) {
+                errorLayout.show()
                 if (activity != null) {
-                    showToast("Error occurred. ${error.localizedMessage}")
+                    showToast("Error: $error")
                 }
             }
         }

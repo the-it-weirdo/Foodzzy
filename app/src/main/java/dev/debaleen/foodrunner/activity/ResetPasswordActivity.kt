@@ -12,7 +12,9 @@ import com.android.volley.VolleyError
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import dev.debaleen.foodrunner.R
+import dev.debaleen.foodrunner.network.ConnectionManager
 import dev.debaleen.foodrunner.network.NetworkTask
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
 

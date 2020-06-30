@@ -7,21 +7,23 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import dev.debaleen.foodrunner.R
-import dev.debaleen.foodrunner.model.RestaurantFoodItem
+import dev.debaleen.foodrunner.model.RestaurantFoodItemUIModel
+import dev.debaleen.foodrunner.util.hide
+import dev.debaleen.foodrunner.util.show
 
 class RestaurantDetailAdapter(
-    private var foodItemList: ArrayList<RestaurantFoodItem>,
+    private var foodItemList: ArrayList<RestaurantFoodItemUIModel>,
     private val clickListener: CartButtonListener
 ) :
     RecyclerView.Adapter<RestaurantDetailAdapter.RestaurantDetailViewHolder>() {
 
-    fun updateDataList(list: ArrayList<RestaurantFoodItem>) {
+    fun updateDataList(list: ArrayList<RestaurantFoodItemUIModel>) {
         foodItemList = list
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RestaurantDetailViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.food_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.food_item_ui, parent, false)
 
         return RestaurantDetailViewHolder(view)
     }
@@ -42,31 +44,45 @@ class RestaurantDetailAdapter(
         private val btnAddToCart: Button = view.findViewById(R.id.btnAddToCart)
         private val btnRemoveFromCart: Button = view.findViewById(R.id.btnRemoveFromCart)
 
-        fun bind(restaurantFoodItem: RestaurantFoodItem, clickListener: CartButtonListener) {
+        fun bind(
+            restaurantFoodItemUIItem: RestaurantFoodItemUIModel,
+            clickListener: CartButtonListener
+        ) {
             txtSerial.text = (adapterPosition + 1).toString()
-            txtFoodName.text = restaurantFoodItem.name
-            txtCostForOne.text = restaurantFoodItem.cost
+            txtFoodName.text = restaurantFoodItemUIItem.name
+            txtCostForOne.text = restaurantFoodItemUIItem.cost
+
+            if (restaurantFoodItemUIItem.isInCart) {
+                btnRemoveFromCart.show()
+                btnAddToCart.hide()
+            } else {
+                btnAddToCart.show()
+                btnRemoveFromCart.hide()
+            }
 
             btnAddToCart.setOnClickListener {
                 if (adapterPosition != -1) {
-                    btnAddToCart.visibility = View.GONE
-                    btnRemoveFromCart.visibility = View.VISIBLE
-                    clickListener.onAddToCartButtonClick(adapterPosition, restaurantFoodItem)
+                    btnAddToCart.hide()
+                    btnRemoveFromCart.show()
+                    clickListener.onAddToCartButtonClick(adapterPosition, restaurantFoodItemUIItem)
                 }
             }
 
             btnRemoveFromCart.setOnClickListener {
                 if (adapterPosition != -1) {
-                    btnRemoveFromCart.visibility = View.GONE
-                    btnAddToCart.visibility = View.VISIBLE
-                    clickListener.onRemoveFromButtonClicked(adapterPosition, restaurantFoodItem)
+                    btnRemoveFromCart.hide()
+                    btnAddToCart.show()
+                    clickListener.onRemoveFromButtonClicked(
+                        adapterPosition,
+                        restaurantFoodItemUIItem
+                    )
                 }
             }
         }
     }
 
     interface CartButtonListener {
-        fun onAddToCartButtonClick(position: Int, foodItem: RestaurantFoodItem)
-        fun onRemoveFromButtonClicked(position: Int, foodItem: RestaurantFoodItem)
+        fun onAddToCartButtonClick(position: Int, foodItem: RestaurantFoodItemUIModel)
+        fun onRemoveFromButtonClicked(position: Int, foodItem: RestaurantFoodItemUIModel)
     }
 }

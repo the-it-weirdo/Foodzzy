@@ -13,11 +13,12 @@ data class RestaurantUIModel (
 
 fun RestaurantUIModel.toRestaurantEntity(userId: String): RestaurantEntity {
     return RestaurantEntity(
-        resId = this.resId,
+        id = resId+userId,
+        resId = resId,
         userId = userId,
-        resName = this.resName,
-        resRating = this.resRating,
-        resCostForOne = this.resCostForOne,
-        resImageUrl = this.resImageUrl
+        resName = resName,
+        resRating = resRating,
+        resCostForOne = resCostForOne,
+        resImageUrl = resImageUrl
     )
 }

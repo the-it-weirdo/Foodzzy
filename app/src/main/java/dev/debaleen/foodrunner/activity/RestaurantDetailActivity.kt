@@ -20,8 +20,9 @@ import dev.debaleen.foodrunner.network.NetworkTask
 import dev.debaleen.foodrunner.adapter.RestaurantDetailAdapter
 import dev.debaleen.foodrunner.database.*
 import dev.debaleen.foodrunner.database.entity.CartElementEntity
-import dev.debaleen.foodrunner.model.RestaurantFoodItem
-import dev.debaleen.foodrunner.model.toRestaurantFoodItemList
+import dev.debaleen.foodrunner.model.*
+import dev.debaleen.foodrunner.network.ConnectionManager
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
 
@@ -37,12 +38,12 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private lateinit var recyclerRestaurantDetails: RecyclerView
     private lateinit var btnGoToCart: Button
     private lateinit var progressLayout: RelativeLayout
-    private lateinit var emptyLayout: RelativeLayout
+    private lateinit var errorLayout: RelativeLayout
 
     private lateinit var recyclerAdapter: RestaurantDetailAdapter
     private lateinit var recyclerLayoutManager: RecyclerView.LayoutManager
 
-    private var menuList = arrayListOf<RestaurantFoodItem>()
+    private var menuList = arrayListOf<RestaurantFoodItemUIModel>()
     private var orderList = arrayListOf<RestaurantFoodItem>()
 
     private lateinit var networkTaskListener: NetworkTask.NetworkTaskListener
@@ -65,7 +66,8 @@ class RestaurantDetailActivity : AppCompatActivity() {
         btnGoToCart.hide()
         progressLayout = findViewById(R.id.progressLayout)
         progressLayout.show()
-        emptyLayout = findViewById(R.id.emptyLayout)
+        errorLayout = findViewById(R.id.errorLayout)
+        errorLayout.hide()
 
         setupRecyclerAdapter()
         recyclerLayoutManager = LinearLayoutManager(this@RestaurantDetailActivity)
@@ -94,16 +96,18 @@ class RestaurantDetailActivity : AppCompatActivity() {
     private fun setupRecyclerAdapter() {
         recyclerAdapter = RestaurantDetailAdapter(menuList,
             object : RestaurantDetailAdapter.CartButtonListener {
-                override fun onAddToCartButtonClick(position: Int, foodItem: RestaurantFoodItem) {
-                    if (orderList.add(foodItem) && orderList.isNotEmpty()) {
+                override fun onAddToCartButtonClick(position: Int, foodItem: RestaurantFoodItemUIModel) {
+                    foodItem.isInCart = true
+                    if (orderList.add(foodItem.toRestaurantFoodItem()) && orderList.isNotEmpty()) {
                         btnGoToCart.show()
                     }
                 }
 
                 override fun onRemoveFromButtonClicked(
-                    position: Int, foodItem: RestaurantFoodItem
+                    position: Int, foodItem: RestaurantFoodItemUIModel
                 ) {
-                    if (orderList.remove(foodItem) && orderList.isEmpty()) {
+                    foodItem.isInCart = false
+                    if (orderList.remove(foodItem.toRestaurantFoodItem()) && orderList.isEmpty()) {
                         btnGoToCart.hide()
                     }
                 }
@@ -143,25 +147,28 @@ class RestaurantDetailActivity : AppCompatActivity() {
                         if (success) {
                             val foodsArray = returnObject.getJSONArray("data")
                             if (foodsArray.length() == 0) {
-                                emptyLayout.show()
+                                errorLayout.show()
                             } else {
                                 menuList = ArrayList(
-                                    foodsArray.toRestaurantFoodItemList(
-                                        "id", "name", "cost_for_one"
+                                    foodsArray.toRestaurantFoodItemUIModelList(
+                                        "id", "name", "cost_for_one", false
                                     )
                                 )
                                 recyclerAdapter.updateDataList(menuList)
                             }
                         } else {
+                            errorLayout.show()
                             showToast("Some unexpected error occurred")
                         }
                     } catch (e: Exception) {
+                        errorLayout.show()
                         showToast("Error: ${e.localizedMessage}")
                     }
                 }
 
                 override fun onFailed(error: VolleyError) {
-                    showToast("Error: ${error.localizedMessage}")
+                    errorLayout.show()
+                    showToast("Error: $error")
                 }
             }
     }

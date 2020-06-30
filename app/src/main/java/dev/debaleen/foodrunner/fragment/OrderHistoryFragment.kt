@@ -17,7 +17,9 @@ import dev.debaleen.foodrunner.R
 import dev.debaleen.foodrunner.adapter.OrderHistoryAdapter
 import dev.debaleen.foodrunner.model.OrderHistoryItem
 import dev.debaleen.foodrunner.model.toRestaurantFoodItemList
+import dev.debaleen.foodrunner.network.ConnectionManager
 import dev.debaleen.foodrunner.network.NetworkTask
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
 
@@ -26,6 +28,7 @@ class OrderHistoryFragment : Fragment() {
     private lateinit var recyclerOrderHistory: RecyclerView
     private lateinit var progressLayout: RelativeLayout
     private lateinit var emptyLayout: RelativeLayout
+    private lateinit var errorLayout: RelativeLayout
     private lateinit var recyclerAdapter: OrderHistoryAdapter
     private lateinit var layoutManager: RecyclerView.LayoutManager
 
@@ -53,6 +56,8 @@ class OrderHistoryFragment : Fragment() {
         progressLayout.show()
         emptyLayout = view.findViewById(R.id.emptyLayout)
         emptyLayout.hide()
+        errorLayout = view.findViewById(R.id.errorLayout)
+        errorLayout.hide()
 
         setupRecycler()
         fetchDataFromNetwork()
@@ -116,15 +121,19 @@ class OrderHistoryFragment : Fragment() {
                                 recyclerAdapter.updateList(orderHistoryList)
                             }
                         } else {
+                            errorLayout.show()
                             showToast("Some unexpected error occurred.")
                         }
                     } catch (e: Exception) {
+                        errorLayout.show()
                         showToast("Exception occurred. ${e.localizedMessage}")
                     }
                 }
 
                 override fun onFailed(error: VolleyError) {
-                    showToast("Error occurred. ${error.localizedMessage}")
+                    progressLayout.hide()
+                    errorLayout.show()
+                    showToast("Error occurred. $error")
                 }
             }
     }

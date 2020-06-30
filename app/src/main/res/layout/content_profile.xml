@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imgUserProfilePic"
+        android:layout_width="@dimen/profile_pic_width"
+        android:layout_height="@dimen/profile_pic_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:src="@drawable/ic_person"
+        android:tint="@color/primaryDarkColor"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/txtUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgUserProfilePic"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/margin_x_large"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_x_large"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_default"
+        android:textStyle="bold"
+        tools:text="Debaleen" />
+
+    <TextView
+        android:id="@+id/txtUserPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtUserName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/margin_x_large"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_x_large"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_default"
+        tools:text="+91-8131904571" />
+
+    <TextView
+        android:id="@+id/txtUserEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtUserPhone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/margin_x_large"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_x_large"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_default"
+        tools:text="ddsmegh4@gmail.com" />
+
+    <TextView
+        android:id="@+id/txtUserDeliveryAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtUserEmail"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/margin_x_large"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_x_large"
+        android:layout_marginBottom="@dimen/margin_default"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_default"
+        tools:text="Tripura" />
+
+</RelativeLayout>

@@ -5,9 +5,18 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import dev.debaleen.foodrunner.model.RestaurantUIModel
 
+/*
+Storing user_id along with entities so that multiple
+user can use the app from the same device.
+* */
+
 @Entity(tableName = "restaurants")
 data class RestaurantEntity(
-    @PrimaryKey @ColumnInfo(name = "res_id") val resId: String,
+    // Since, we are also storing user_id, res_id alone cannot be the
+    // primary key. That will violate UNIQUE Constraint of DB when a 2nd user tries to add the same
+    // restaurant as favourite.
+    @PrimaryKey @ColumnInfo(name = "id") val id: String,
+    @ColumnInfo(name = "res_id") val resId: String,
     @ColumnInfo(name = "user_id") val userId: String,
     @ColumnInfo(name = "res_name") val resName: String,
     @ColumnInfo(name = "res_rating") val resRating: String,

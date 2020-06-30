@@ -21,7 +21,7 @@
         android:layout_above="@id/txtResult"
         android:contentDescription="@string/order_placed_successfully"
         android:elevation="@dimen/elevation_default"
-        android:src="@drawable/ic_failed" />
+        android:src="@drawable/ic_success" />
 
     <TextView
         android:id="@+id/txtResult"

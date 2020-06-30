@@ -17,7 +17,7 @@ class CartAdapter(private var foodItemList: ArrayList<RestaurantFoodItem>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.order_items, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.food_item, parent, false)
 
         return CartViewHolder(view)
     }

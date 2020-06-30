@@ -24,6 +24,8 @@ import dev.debaleen.foodrunner.database.AsyncTaskCompleteListener
 import dev.debaleen.foodrunner.database.ClearCartAsyncTask
 import dev.debaleen.foodrunner.database.RetrieveCartAsyncTask
 import dev.debaleen.foodrunner.model.RestaurantFoodItem
+import dev.debaleen.foodrunner.network.ConnectionManager
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -187,7 +189,7 @@ class CartActivity : AppCompatActivity() {
         val drawableResId: Int
         tintColor = if (success) {
             // Since Picasso doesn't support loading Vector drawables, using .setImageResource()
-            drawableResId = R.drawable.ic_check_filled
+            drawableResId = R.drawable.ic_success
             ContextCompat.getColor(this@CartActivity, R.color.primaryColor)
         } else {
             drawableResId = R.drawable.ic_failed

@@ -24,13 +24,11 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_marginBottom="@dimen/margin_default"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/btnGoToCart">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/txtRestaurantDetailsHeader"
@@ -55,68 +53,70 @@
                 android:id="@+id/recyclerRestaurantDetails"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_above="@id/btnGoToCart"
                 android:layout_below="@id/divider"
                 android:padding="@dimen/padding_small"
-                tools:listitem="@layout/food_item" />
+                tools:listitem="@layout/food_item_ui" />
 
-            <RelativeLayout
-                android:id="@+id/progressLayout"
+            <Button
+                android:id="@+id/btnGoToCart"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:visibility="gone">
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_default"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:text="@string/go_to_cart"
+                android:textAllCaps="false"
+                android:textSize="@dimen/text_size_default" />
 
-                <ProgressBar
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/emptyLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="@dimen/logo_width"
-                    android:layout_height="@dimen/logo_height"
-                    android:layout_above="@id/txtEmptyText"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/rounded_corner_background"
-                    android:contentDescription="@string/no_favourites"
-                    android:src="@drawable/ic_error" />
-
-                <TextView
-                    android:id="@+id/txtEmptyText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="@dimen/margin_small"
-                    android:padding="@dimen/padding_default"
-                    android:text="@string/error_string"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/text_size_default" />
-
-            </RelativeLayout>
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/btnGoToCart"
+        <RelativeLayout
+            android:id="@+id/progressLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:text="@string/go_to_cart"
-            android:textAllCaps="false"
-            android:textSize="@dimen/text_size_default"
-            android:visibility="visible" />
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/errorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="@dimen/logo_width"
+                android:layout_height="@dimen/logo_height"
+                android:layout_above="@id/txtError"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/rounded_corner_background"
+                android:contentDescription="@string/error"
+                android:src="@drawable/ic_error" />
+
+            <TextView
+                android:id="@+id/txtError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_margin="@dimen/margin_small"
+                android:padding="@dimen/padding_default"
+                android:text="@string/error_string"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_default" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

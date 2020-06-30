@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -143,10 +144,10 @@ class DashboardActivity : AppCompatActivity() {
             sharedPreferences.edit().clear().apply()
             val intent = Intent(this@DashboardActivity, LoginActivity::class.java)
             startActivity(intent)
-            finish()
+            ActivityCompat.finishAffinity(this@DashboardActivity)
         }
         dialog.setNegativeButton("NO") { _, _ ->
-            navigateFromDashboardActivity(FragmentDestinations.HOME)
+            openHomeFragment()
         }
         dialog.create()
         dialog.show()

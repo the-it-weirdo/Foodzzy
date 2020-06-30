@@ -1,4 +1,4 @@
-package dev.debaleen.foodrunner.util
+package dev.debaleen.foodrunner.network
 
 import android.app.Activity
 import android.content.Context

@@ -7,11 +7,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.ProgressBar
+import androidx.core.app.ActivityCompat
 import com.android.volley.Request
 import com.android.volley.VolleyError
 import com.google.android.material.textfield.TextInputEditText
 import dev.debaleen.foodrunner.*
+import dev.debaleen.foodrunner.network.ConnectionManager
 import dev.debaleen.foodrunner.network.NetworkTask
+import dev.debaleen.foodrunner.network.noInternetDialog
 import dev.debaleen.foodrunner.util.*
 import org.json.JSONObject
 
@@ -214,12 +217,12 @@ class RegistrationActivity : AppCompatActivity() {
     private fun navigateToLoginActivity() {
         val intent = Intent(this@RegistrationActivity, LoginActivity::class.java)
         startActivity(intent)
-        finish()
+        ActivityCompat.finishAffinity(this@RegistrationActivity)
     }
 
     private fun navigateToDashboardActivity() {
         val intent = Intent(this@RegistrationActivity, DashboardActivity::class.java)
         startActivity(intent)
-        finish()
+        ActivityCompat.finishAffinity(this@RegistrationActivity)
     }
 }

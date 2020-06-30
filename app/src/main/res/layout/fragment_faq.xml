@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/padding_default"
+        android:paddingTop="@dimen/padding_small"
         tools:listitem="@layout/faq_item" />
 
 </RelativeLayout>
