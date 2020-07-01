@@ -232,7 +232,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showSortDialog() {
-        val singleItems = arrayOf("Rating", "Cost(High to Low)", "Cost(Low to High")
+        val singleItems = arrayOf("Rating", "Cost(High to Low)", "Cost(Low to High)")
         var sortOn: RestaurantSortOn = when (checkedItem) {
             0 -> {
                 RestaurantSortOn.RATING
